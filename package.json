@@ -1,0 +1,25 @@
+{
+  "name": "olxscraper",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "fs": "0.0.1-security",
+    "html-table-to-json": "^0.4.0",
+    "http-errors": "~1.6.2",
+    "jquery": "^3.3.1",
+    "morgan": "~1.9.0",
+    "path": "^0.12.7",
+    "pug": "^2.0.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "striptags": "^3.1.1",
+    "tabletojson": "^1.0.4"
+  }
+}
