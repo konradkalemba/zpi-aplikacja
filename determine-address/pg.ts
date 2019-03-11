@@ -1,8 +1,7 @@
 import * as Pg from 'pg';
 import * as Fs from 'fs';
-import * as PgCopy from 'pg-copy-streams'
 
-export class PgCon {
+class PgCon {
     constructor(
         public host: string,
         public db: string,
@@ -27,13 +26,10 @@ function makeConfig(): Pg.ClientConfig {
     }
 }
 
-export async function tryConnect() {
-    let conf = makeConfig()
-    let client = new Pg.Client(conf)
-    await client.connect()
-    let q = await client.query("select 'hello postgres!' as hello;")
-    console.log(q.rows[0].hello)
-    
+function makePool() {
+    return new Pg.Pool(makeConfig())
 }
 
-tryConnect().then(() => console.log('success!')).catch(err => console.log(err))
+export let pool = makePool();
+
+

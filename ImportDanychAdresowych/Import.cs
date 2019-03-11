@@ -215,9 +215,10 @@ namespace ImportDanychAdresowych
                     Console.WriteLine("Kopiowanie ulic...");
                     var exStr = (await c.QueryAsync<Ulica>("select id_teryt, miasto_id_teryt from ulice;"));
 
-                    _u = _u.AsParallel().Where(u =>
-                        _u.Count(ur => ur.IdTeryt == u.IdTeryt && ur.MiastoIdTeryt == u.MiastoIdTeryt) == 1 &&
-                        !exStr.Any(e => e.IdTeryt == u.IdTeryt && e.MiastoIdTeryt == u.MiastoIdTeryt)).ToList();
+                    _u = _u
+                        .Where(u => !exStr.Any(e => e.Equals(u)))
+                        .Distinct()
+                        .ToList();
 
                     using (var wr = c.BeginBinaryImport("copy ulice(id_teryt,nazwa,miasto_id_teryt) from stdin (format binary);"))
                     {
