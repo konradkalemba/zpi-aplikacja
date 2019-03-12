@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dapper;
 using Npgsql;
@@ -39,9 +40,10 @@ namespace ImportDanychAdresowych
         {
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
             _delegatury = new Dictionary<string, int>();
-            _srvCert = srvCert;
+            _srvCert = Regex.Replace(srvCert, @"\s+", "");
+            _srvCert = srvCert.Replace("-----BEGIN CERTIFICATE-----", "");
+            _srvCert = srvCert.Replace("-----END CERTIFICATE-----", "");
             _dbcon = $"Host={addr};Username={usr};Password={pass};Database={db};SSL Mode=Require;";
-
         }
         // pliki
         // http://eteryt.stat.gov.pl/eTeryt/rejestr_teryt/udostepnianie_danych/baza_teryt/uzytkownicy_indywidualni/pobieranie/pliki_pelne.aspx?contrast=default
