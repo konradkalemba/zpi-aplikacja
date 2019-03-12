@@ -2,4 +2,5 @@
 **/obj
 **/node_modules
 .DS_Store
-pg-con.json
+
+.env # konfiguracja
