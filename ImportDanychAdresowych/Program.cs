@@ -6,11 +6,17 @@ namespace ImportDanychAdresowych
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            var con = JsonConvert.DeserializeObject<PgCon>(File.ReadAllText("./pg-con.json"));
-            var imp = new Import(con.Host, con.ServerCrt, con.User, con.Pass, con.Db);
+            if (args.Length != 1)
+            {
+                Console.WriteLine("No PG connection configuration file specified!");
+                return 1;
+            }
+            var con = JsonConvert.DeserializeObject<PgCon>(File.ReadAllText(args[0]));
+            var imp = new Import(con.Host, File.ReadAllText(con.ServerCrtFile), con.User, con.Pass, con.Db);
             imp.Run("./terc.csv", "./simc.csv", "./ulic.csv").Wait();
+            return 0;
         }
     }
 }
