@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 import { AddressQuery } from "./addressQuery";
 import { determinePg } from "./determinePg";
 import { determineNode } from "./determineNode";
