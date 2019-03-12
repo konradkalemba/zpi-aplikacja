@@ -55,12 +55,12 @@ async function bench() {
         let begin = process.hrtime.bigint()
         var res = await determineNode(q)
         let end = process.hrtime.bigint()
-        pgTimes.push(end - begin)
+        nodeTimes.push(end - begin)
 
         begin = process.hrtime.bigint()
         res = await determinePg(q)
         end = process.hrtime.bigint()
-        nodeTimes.push(end - begin)
+        pgTimes.push(end - begin)
     }
     console.log("PG: " + avg(pgTimes) / BigInt(1000000))
     console.log("Node: " + avg(nodeTimes) / BigInt(1000000))

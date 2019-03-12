@@ -56,13 +56,13 @@ function bench() {
                 case 2:
                     res = _a.sent();
                     end = process.hrtime.bigint();
-                    pgTimes.push(end - begin);
+                    nodeTimes.push(end - begin);
                     begin = process.hrtime.bigint();
                     return [4 /*yield*/, determinePg_1.determinePg(q)];
                 case 3:
                     res = _a.sent();
                     end = process.hrtime.bigint();
-                    nodeTimes.push(end - begin);
+                    pgTimes.push(end - begin);
                     _a.label = 4;
                 case 4:
                     i++;
