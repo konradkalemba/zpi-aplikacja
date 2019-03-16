@@ -1,6 +1,6 @@
 # otodom-scraper
 
-Scraper zbieraj�cy wszystkie og�oszenie wynajem z Wroc�awia z portalu Otodom.
+Scraper zbierający wszystkie ogłoszenie wynajem z Wrocławia z portalu Otodom.
 
 ## Instalacja
 
