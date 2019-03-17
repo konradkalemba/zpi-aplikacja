@@ -27,7 +27,7 @@ function getAnnouncementsURLs() {
         request(page, function (error, response, html) {
             if (!error && response.statusCode === 200) {
                 const $ = cheerio.load(html, {decodeEntities: false});
-                $('.row .section-listing__row-content article').each(function (i) {
+                $('.row .section-listing__row-content article').slice(3).each(function (i) {
                     const announcements = $(this);
                     announcementURLs.push(announcements.attr('data-url'));
                 });
