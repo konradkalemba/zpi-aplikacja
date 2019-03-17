@@ -1,101 +1,147 @@
 const express = require('express');
 const router = express.Router();
-
-const {
-  performance,
-} = require('perf_hooks');
+const {performance} = require('perf_hooks');
 const request = require('request');
 const cheerio = require('cheerio');
-let powierzchnia="";
+
+//flat details
+let opis = "";
+let powierzchnia = "";
 let firstPage = 'https://www.otodom.pl/wynajem/mieszkanie/wroclaw/';
 let page = firstPage;
-
+let liczbaPokoi = "";
+let rodzajZabudowy = "";
+let pietro = "";
+let liczbaPieter = "";
+let okna = "";
+let stanWykonczenia = "";
+let materialBudynku = "";
+let rokBudowy = "";
+let zdjecia = [];
 
 
 let announcements = [];
-let getAnnouncementsURLs = function () {
-  return new Promise(function (resolve, reject) {
-    let announcementURLs = [];
-    request(page, function (error, response, html) {
-      if (!error && response.statusCode === 200) {
-        const $ = cheerio.load(html, {decodeEntities: false});
-        $('.row .section-listing__row-content article').each(function (i) {
-          const announcements = $(this);
-          announcementURLs.push(announcements.attr('data-url'));
+function getAnnouncementsURLs() {
+    return new Promise(function (resolve, reject) {
+        let announcementURLs = [];
+        request(page, function (error, response, html) {
+            if (!error && response.statusCode === 200) {
+                const $ = cheerio.load(html, {decodeEntities: false});
+                $('.row .section-listing__row-content article').slice(3).each(function (i) {
+                    const announcements = $(this);
+                    announcementURLs.push(announcements.attr('data-url'));
+                });
+                console.log("page: " + page);
+                page = $('.pager-next a').attr('href');
+                console.log("number of announcements on this page: " + announcementURLs.length);
+                console.log(announcementURLs);
+                resolve(announcementURLs);
+            } else reject("err");
         });
-        console.log("page przed przypisaniem: " + page);
-        page = $('.pager-next a').attr('href');
-        console.log(announcementURLs.length);
-        resolve(announcementURLs);
-      } else reject("err");
     });
-  });
 };
-let getAnnouncementInfo = function (announcementURLs, index) {
-  return new Promise(function (resolve, reject) {
-    request(announcementURLs[index], function (error, response, html) {
-      if (!error && response.statusCode === 200) {
-        const url = announcementURLs[index];
-        const $ = cheerio.load(html, {decodeEntities: false});
+function getAnnouncementInfo (announcementURLs, index) {
+    return new Promise(function (resolve, reject) {
+        request(announcementURLs[index], function (error, response, html) {
+            if (!error && response.statusCode === 200) {
+                const url = announcementURLs[index];
+                const $ = cheerio.load(html, {decodeEntities: false});
 
-        //SZCZEGÓŁY
-        $('.section-overview div li').each(function (i) {
-          const card = $(this);
-          let value = $(card).text();
-          value = value.split(':');
+                //OPIS
+                opis = $('.section-description p').text();
 
-          if (value[0] === "Powierzchnia") {
-            powierzchnia = value[1];
-          }
+                //ZDJĘCIA
+                $('.slick-list picture img').each(function (i) {
+                    let picture = $(this);
+                    picture = picture.attr("src");
+                    zdjecia.push(picture);
+                });
+                //SZCZEGÓŁY
+                $('.section-overview div li').each(function (i) {
+                    const card = $(this);
+                    let value = $(card).text();
+                    value = value.split(':');
+
+                    if (value[0] === "Powierzchnia") {
+                        powierzchnia = value[1];
+                    }
+                    if (value[0] === "Liczba pokoi") {
+                        liczbaPokoi = value[1];
+                    }
+                    if (value[0] === "Rodzaj zabudowy") {
+                        rodzajZabudowy = value[1];
+                    }
+                    if (value[0] === "Piętro") {
+                        pietro = value[1];
+                    }
+                    if (value[0] === "Liczba pięter") {
+                        liczbaPieter = value[1];
+                    }
+                    if (value[0] === "Okna") {
+                        okna = value[1];
+                    }
+                    if (value[0] === "Stan wykończenia") {
+                        stanWykonczenia = value[1];
+                    }
+                    if (value[0] === "Materiał budynku") {
+                        materialBudynku = value[1];
+                    }
+                    if (value[0] === "Rok budyowy") {
+                        rokBudowy = value[1];
+                    }
+                });
+                let announcementInfo = {
+                    powierzchnia: powierzchnia,
+                    liczbaPokoi: liczbaPokoi,
+                    rodzajZabudowy: rodzajZabudowy,
+                    pietro: pietro,
+                    liczbaPieter: liczbaPieter,
+                    materialBudynku: materialBudynku,
+                    okna: okna,
+                    stanWykonczenia: stanWykonczenia,
+                    materialBudynku: materialBudynku,
+                    rokBudowy: rokBudowy,
+                    opis: opis,
+                    zdjecia: zdjecia
+                };
+                console.log("getAnnouncementInfo: " + announcementURLs[index]);
+                console.log("URL index: " + index);
+                resolve(announcementInfo);
+            } else reject("request error");
         });
-        let announcementInfo = {
-          powierzchnia: powierzchnia,
-        };
-        //console.log(announcementInfo);
-        resolve(announcementInfo);
-      }
-      else reject("request error");
     });
-  });
-};
-let crawlOnePage = function (announcementURLs) {
-  console.log("crawlOnePage");
-  let promises = [];
-  for (let index = 0; index < announcementURLs.length; ++index) {
-    promises.push(getAnnouncementInfo(announcementURLs, index));
-    getAnnouncementInfo(announcementURLs, index).then(
-        function (result) {
-          announcements.push(result);
-        },
-        function (err) {
-          console.log("loguje: " + err);
-        }
-    )
-  }
-  return Promise.all(promises);
-};
+}
+async function crawlOnePage (announcementURLs) {
+    console.log("crawlOnePage");
+    for (let index = 0; index < announcementURLs.length; ++index) {
+        console.log("for loop index: ", index);
+        //await getAnnouncementInfo(announcementURLs, index);
+        let result = await getAnnouncementInfo(announcementURLs, index);
+        announcements.push(result);
+    }
+    return "done";
+}
 
-let process = function() {
-  console.log("start");
-  getAnnouncementsURLs().then(
-      function (announcementURLs) {
-        console.log("promise.then");
-        //console.log("nextPage: " + nextPage);
-        console.log(announcementURLs[0]);
-        return crawlOnePage(announcementURLs);
-      },)
-      .then(function (announcementInfoArr) {
-            //console.log(announcementInfoArr);
-            console.log("page zaraz przed końcem: " + page);
-            if (page !== undefined) {
-              process();
+function process() {
+    console.log("start");
+    getAnnouncementsURLs().then(
+        function (announcementURLs) {
+            //console.log("promise.then");
+            //console.log("nextPage: " + nextPage);
+            console.log(announcementURLs[0]);
+            return crawlOnePage(announcementURLs);
+        },)
+        .then(function () {
+                //console.log(announcementInfoArr);
+                console.log("page zaraz przed końcem: " + page);
+                if (page !== undefined) {
+                    process();
+                } else console.log(announcements);
+                let t1 = performance.now();
+                console.log("Time: " + (t1 - t0) / 1000 + " seconds.")
             }
-            else console.log(announcements);
-            let t1 = performance.now();
-            console.log("Call to doSomething took " + (t1 - t0)/1000 + " seconds.")
-          }
-      );
-};
+        );
+}
 let t0 = performance.now();
 process();
 
