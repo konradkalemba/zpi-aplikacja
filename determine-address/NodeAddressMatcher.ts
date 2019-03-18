@@ -3,10 +3,7 @@ import { AddressQuery } from './addressQuery'
 import { AddressMatcher } from './addressMatcher'
 import { pool } from './pg'
 import { QueryResult } from 'pg'
-import { filterWordsForStreet } from './common'
-import Levenshtein from 'js-levenshtein'
-
-const MIN_LEV = 5000000
+import { compareTwoStrings } from 'string-similarity'
 
 export default class NodeAddressMatcher implements AddressMatcher {
   private static streets: QueryResult
@@ -17,24 +14,34 @@ export default class NodeAddressMatcher implements AddressMatcher {
   match(q: AddressQuery): Promise<Address> {
     return new Promise(async (resolve, reject) => {
       const streets = await this.getStreets()
-      const words = filterWordsForStreet(q.description.split(/\s+/))
+      const regex = /(ul\.|ulica|ulicy|osiedlu przy ul\.|osiedlu|osiedla|osiedle|al\.|alei|aleje|pl\.|plac)\s(.+?(?=\s+we\s+|\s+w\s+|\s+na\s+|[.|,|0-9|;|\\|/|\(|\)]|\n))/img
 
-      let resultStreet: Street | null = null
-      let minLev = MIN_LEV
-
-      for (let i = 0; i < words.length; i++) {
+      let bestMatch
+      let match
+      
+      if ((match = regex.exec(q.description)) !== null) {
         for (let j = 0; j < streets.rowCount; j++) {
-          const l = Levenshtein(streets.rows[j].nazwa, words[i])
+          const score = compareTwoStrings(streets.rows[j].nazwa, match[2].trim())
           
-          if (l < minLev) {
-            minLev = l
-            resultStreet = new Street(streets.rows[j].id_teryt, streets.rows[j].nazwa)
+          if (!bestMatch || score > bestMatch.score) {
+            bestMatch = {
+              index: j,
+              score
+            }
           }
         }
       }
 
-      if (resultStreet) {
-        resolve(new Address(null, resultStreet))
+      if (bestMatch) {
+        resolve(
+          new Address(
+            null,
+            new Street(
+              streets.rows[bestMatch.index].id_teryt,
+              streets.rows[bestMatch.index].nazwa
+            )
+          )
+        )
       } else {
         reject(new Error())
       }
