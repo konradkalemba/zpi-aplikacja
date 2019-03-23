@@ -40,9 +40,9 @@ namespace ImportDanychAdresowych
         {
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
             _delegatury = new Dictionary<string, int>();
-            _srvCert = Regex.Replace(srvCert, @"\s+", "");
             _srvCert = srvCert.Replace("-----BEGIN CERTIFICATE-----", "");
-            _srvCert = srvCert.Replace("-----END CERTIFICATE-----", "");
+            _srvCert = _srvCert.Replace("-----END CERTIFICATE-----", "");
+            _srvCert = Regex.Replace(_srvCert, @"\s+", "");
             _dbcon = $"Host={addr};Username={usr};Password={pass};Database={db};SSL Mode=Require;";
         }
         // pliki
@@ -237,6 +237,9 @@ namespace ImportDanychAdresowych
         }
         private bool ValidateCert(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors err)
         {
+            Console.WriteLine(Convert.ToBase64String(cert.GetRawCertData()));
+            Console.WriteLine();
+            Console.WriteLine(_srvCert);
             return Convert.ToBase64String(cert.GetRawCertData()) == _srvCert;
         }
     }
