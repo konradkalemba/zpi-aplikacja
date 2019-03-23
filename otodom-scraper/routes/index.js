@@ -88,7 +88,7 @@ function getAnnouncementInfo (announcementURLs, index) {
                     if (value[0] === "Materiał budynku") {
                         materialBudynku = value[1];
                     }
-                    if (value[0] === "Rok budyowy") {
+                    if (value[0] === "Rok budowy") {
                         rokBudowy = value[1];
                     }
                 });
