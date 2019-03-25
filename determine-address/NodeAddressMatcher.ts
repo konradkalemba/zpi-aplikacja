@@ -16,7 +16,7 @@ export default class NodeAddressMatcher implements AddressMatcher {
   match(q: AddressQuery): Promise<Address> {
     return new Promise(async (resolve, reject) => {
       const streets = await this.getStreets()
-      const regex = /(ul\.|ulica|ulicy|osiedlu przy ul\.|osiedlu|osiedla|osiedle|al\.|alei|aleje|pl\.|plac)\s(.+?(?=\s+we\s+|\s+w\s+|\s+na\s+|[.|,|0-9|;|\\|/|\(|\)]|\n|$))/img
+      const regex = /(ul\.|ulica|ulicy|osiedlu przy ul\.|osiedlu|osiedla|osiedle|al\.|alei|aleje|pl\.|plac)\s*(.+?(?=\s+we\s+|\s+w\s+|\s+na\s+|[.|,|0-9|;|\\|/|\(|\)]|\n|$))/img
 
       let bestMatch
       let match
