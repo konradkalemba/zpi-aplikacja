@@ -67,7 +67,7 @@ function getAnnouncementInfo (announcementURLs, index) {
                 $('.parameters__rolled li').each(function () {
                     const parameter = $(this);
                     const parameterName = parameter.children('span').text();
-                    const parameterValue = parameter.children('b').text();
+                    const parameterValue = parameter.children('b').text().trim();
                     // console.log("parameterName: ", parameterName);
                     // console.log("parameterValue: ", parameterValue);
 
@@ -121,6 +121,7 @@ function getAnnouncementInfo (announcementURLs, index) {
                 };
                 console.log("getAnnouncementInfo: " + announcementURLs[index]);
                 console.log("URL index: " + index);
+                console.log(announcementInfo);
                 resolve(announcementInfo);
             } else reject("request error = "+error);
         });
