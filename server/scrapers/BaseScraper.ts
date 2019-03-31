@@ -1,4 +1,5 @@
 import { AdData } from './AdData';
+import { URL } from 'url';
 
 export interface Scraper {
     process(): void;
@@ -6,8 +7,8 @@ export interface Scraper {
 
 export abstract class BaseScraper implements Scraper {
     protected _ads: AdData[] = [];
-    protected _pageURL: URL;
-    
+    protected _hasNextPage: boolean = true;
+
     protected abstract getAdsURLs(): Promise<URL[]>;
     protected abstract getAdDataFromURL(url: URL): Promise<AdData>;
 
@@ -22,7 +23,7 @@ export abstract class BaseScraper implements Scraper {
             .getAdsURLs()
             .then(adsURLs => this.crawlURLs(adsURLs))
             .then(() => {
-                if (this._pageURL) {
+                if (this._hasNextPage) {
                     this.process();
                 }
             })

@@ -4,7 +4,7 @@ export type AdData = {
     roomsNumber?: any,
     buildingType?: any,
     floor?: any,
-    floorNumbers?: any,
+    floorsNumber?: any,
     windows?: any,
     buildingMaterial?: any,
     finishing?: any,

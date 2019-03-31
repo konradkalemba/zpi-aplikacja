@@ -2,9 +2,16 @@
   "name": "homie-server",
   "version": "1.0.0",
   "scripts": {
+    "start": "node ./build/index.js",
     "tsc": "tsc"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.11",
+    "@types/request": "^2.48.1",
     "typescript": "^3.4.1"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "request": "^2.88.0"
   }
 }
