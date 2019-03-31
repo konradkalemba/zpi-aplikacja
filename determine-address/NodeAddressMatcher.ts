@@ -5,6 +5,8 @@ import { pool } from './pg'
 import { QueryResult } from 'pg'
 import { compareTwoStrings } from 'string-similarity'
 
+const LAST_PART_MIN_SCORE = 1
+
 export default class NodeAddressMatcher implements AddressMatcher {
   private static streets: QueryResult
 
@@ -20,8 +22,20 @@ export default class NodeAddressMatcher implements AddressMatcher {
       let match
       
       if ((match = regex.exec(q.description)) !== null) {
+        const guess = match[2].trim()
         for (let j = 0; j < streets.rowCount; j++) {
-          const score = compareTwoStrings(streets.rows[j].nazwa, match[2].trim())
+          const streetName = streets.rows[j].nazwa
+          const parts = streetName.split(' ')
+          let score = 0
+
+          if (parts.length > 1 && guess.indexOf(' ') < 0) {
+            score = compareTwoStrings(parts[parts.length - 1], guess)
+            if (score < LAST_PART_MIN_SCORE) {
+              score = compareTwoStrings(streetName, guess)
+            }
+          } else {
+            score = compareTwoStrings(streetName, guess)
+          }
           
           if (!bestMatch || score > bestMatch.score) {
             bestMatch = {
