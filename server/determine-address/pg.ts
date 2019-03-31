@@ -7,22 +7,20 @@ function makeConfig(): Pg.ClientConfig {
         database: process.env.DB_NAME,
         password: process.env.DB_PASS,
         host: process.env.DB_HOST
-    }
+    };
 
     if (process.env.DB_CA_FILE) {
         config.ssl = {
             rejectUnauthorized: true,
             ca: Fs.readFileSync(process.env.DB_CA_FILE)
-        }
+        };
     }
 
-    return config
+    return config;
 }
 
-function makePool() {
-    return new Pg.Pool(makeConfig())
+function makePool(): Pg.Pool {
+    return new Pg.Pool(makeConfig());
 }
 
 export let pool = makePool();
-
-

@@ -8,10 +8,20 @@
   "devDependencies": {
     "@types/cheerio": "^0.22.11",
     "@types/request": "^2.48.1",
+    "@types/js-levenshtein": "^1.1.0",
+    "@types/node": "^11.11.0",
+    "@types/pg": "^7.4.13",
+    "@types/pg-copy-streams": "^1.2.0",
+    "@types/string-similarity": "^3.0.0",
     "typescript": "^3.4.1"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "csv-parse": "^4.3.4",
+    "dotenv": "^6.2.0",
+    "js-levenshtein": "^1.1.6",
+    "pg": "^7.8.2",
+    "string-similarity": "^3.0.0"
   }
 }
