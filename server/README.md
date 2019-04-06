@@ -1,6 +1,6 @@
-# determine-address
+# homie-server
 
-Moduł wyłapujący lokalizację z opisu ogłoszenia.
+Serwer aplikacji 
 
 ## Instalacja
 
@@ -13,6 +13,10 @@ npm install
 Kompilacja:
 ```bash
 npm run tsc
+```
+Uruchomienie skryptu `index.ts`:
+```bash
+npm run start
 ```
 
 ### Połączenie z bazą danych
