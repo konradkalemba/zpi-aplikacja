@@ -3,6 +3,7 @@ import { Address } from '../determine-address';
 export type AdData = {
     description: any,
     address?: Address,
+    url?: any,
     area?: any,
     additionalFees?: any,
     roomsNumber?: any,
