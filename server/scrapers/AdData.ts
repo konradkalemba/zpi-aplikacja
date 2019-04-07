@@ -1,5 +1,6 @@
 export type AdData = {
     description: any,
+    url?: any,
     area?: any,
     additionalFees?: any,
     roomsNumber?: any,

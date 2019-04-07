@@ -35,15 +35,33 @@ export class GratkaScraper extends BaseScraper {
             });
         });
     }
+    protected getOwnerName($: CheerioStatic): string {
+        var scripts = $('script').get();
+        let name: string = '';
+        scripts.forEach(function (element, index) {
+            if (element.children[0] !== undefined) {
+                var reg = /context: \'contactForm\'/;
+                if (element.children[0].data.match(reg) !== null) {
+                    let scriptString = element.children[0].data;
+                    let nameRegex = /"person": ".+"/;
+                    let found = scriptString.match(nameRegex)[0];
+                    name = found.slice(11, found.length - 1);
+                }
+            }
+        });
+        return name;
+    }
 
     protected getAdDataFromURL(url: URL): Promise<AdData> {
         return new Promise<AdData>((resolve, reject) => {
             request(url.href, (error, response, html) => {
                 if (!error && response.statusCode === 200) {
-                    const $: CheerioStatic = cheerio.load(html, {decodeEntities: false});
-
+                    const $: CheerioStatic = cheerio.load(html, { normalizeWhitespace: false, xmlMode: false, decodeEntities: true });
                     let adData: AdData = {
+                        url: url.href,
                         description: $('.description__rolled').text(),
+                        price: $('.priceInfo__value').text().trim().replace(/\s/g, ""),
+                        ownerName: this.getOwnerName($),
                     };
 
                     $('.parameters__rolled li').each(function (index, element) {
