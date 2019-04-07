@@ -59,10 +59,16 @@ export class GratkaScraper extends BaseScraper {
                     const $: CheerioStatic = cheerio.load(html, { normalizeWhitespace: false, xmlMode: false, decodeEntities: true });
                     let adData: AdData = {
                         url: url.href,
+                        photos: [],
                         description: $('.description__rolled').text(),
                         price: $('.priceInfo__value').text().trim().replace(/\s/g, ""),
                         ownerName: this.getOwnerName($),
                     };
+
+                    $("meta[property='og:image']").each((index, element) => {
+                        const photoMetaTag: Cheerio = $(element);
+                        adData.photos.push(photoMetaTag.attr("content"));
+                    });
 
                     $('.parameters__rolled li').each(function (index, element) {
                         const parameter: Cheerio = $(element);
