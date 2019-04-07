@@ -3,6 +3,7 @@ import { BaseScraper } from './BaseScraper';
 import { URL } from 'url';
 import request from 'request';
 import cheerio from 'cheerio';
+import { AddressMatcher } from '../determine-address';
 
 export class OtodomScraper extends BaseScraper {
     private _pageURL: URL = new URL('https://www.otodom.pl/wynajem/mieszkanie/wroclaw/');
@@ -49,7 +50,7 @@ export class OtodomScraper extends BaseScraper {
                 }
             };
 
-            request(options, (error, response, html) => {
+            request(options, async (error, response, html) => {
                 if (!error && response.statusCode === 200) {
                     const $: CheerioStatic = cheerio.load(html, { decodeEntities: false });
 
@@ -57,6 +58,11 @@ export class OtodomScraper extends BaseScraper {
                         description: $('.section-description p').text(),
                         photos: []
                     };
+                    
+                    const addressMatched = await AddressMatcher.match(adData.description).catch(e => null);
+                    if (addressMatched) {
+                        adData.address = addressMatched;
+                    }
 
                     $('.slick-list picture img').each((index, element) => {
                         const photo: Cheerio = $(element);

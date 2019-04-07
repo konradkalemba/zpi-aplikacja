@@ -1,5 +1,8 @@
+import { Address } from '../determine-address';
+
 export type AdData = {
     description: any,
+    address?: Address,
     area?: any,
     additionalFees?: any,
     roomsNumber?: any,

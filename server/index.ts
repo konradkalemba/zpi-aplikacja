@@ -1,4 +1,6 @@
-import { OlxScraper } from './scrapers/OlxScraper';
+require('dotenv').config();
+
+import {OlxScraper} from './scrapers/OlxScraper';
 import {GratkaScraper} from "./scrapers/GratkaScraper";
 import {OtodomScraper} from "./scrapers/OtodomScraper";
 
