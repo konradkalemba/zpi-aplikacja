@@ -1,0 +1,8 @@
+[Unit]
+Description=Usługa pobierająca dane ogłoszeń
+Wants=scrapers.timer
+
+[Service]
+ExecStart=/usr/local/bin/node /opt/scrapers/index.js
+WorkingDirectory=/opt/scrapers
+User=scrapers
