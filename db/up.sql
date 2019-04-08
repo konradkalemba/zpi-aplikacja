@@ -32,3 +32,36 @@ create table ulice (
 
 create index ulice_nazwa on ulice using gist(nazwa gist_trgm_ops);
 -- create index ulice_nazwa on ulice using gin(nazwa gin_trgm_ops);
+
+
+
+create table ogloszenia (
+    id int generated always as identity primary key,
+    otodom_id int,
+    olx_id int,
+    opis text not null,
+    powierzchnia int,
+    dodatkowe_oplaty number,
+    liczba_pokoi int,
+    rodzaj_zabudowy text,
+    pietro text,
+    poziom_opis text,
+    liczba_pieter int,
+    okna text,
+    material_budynku text,
+    rok_budowy int,
+    autor text,
+    nr_telefonu text,
+    umeblowanie boolean,
+    czynsz int,
+    ulica_id int foreign key references ulice(id_teryt),
+    miasto_id int foreign key references miasta(id_teryt),
+    dzielnica_id int foreign key references dzielnice(id_teryt)
+);
+
+create table zdjecia (
+    id int generated always as identity primary key,
+    ogloszenie_id int foreign key references ogloszenia(id),
+    zdj bytea not null,
+    nazwa_pliku text
+);
