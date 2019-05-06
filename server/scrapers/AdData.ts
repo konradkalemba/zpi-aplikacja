@@ -9,5 +9,6 @@ export type AdData = {
     buildingMaterial?: any,
     finishing?: any,
     buildingYear?: any,
-    photos?: any
+    photos?: any,
+    price?: any
 }

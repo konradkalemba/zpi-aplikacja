@@ -64,6 +64,10 @@ export class OtodomScraper extends BaseScraper {
                         adData.photos.push(photo.attr('src'));
                     });
 
+                    const price = $('.css-7ryazv-AdHeader-className').text();
+                    //console.log("Price = "+price.trim());
+                    adData.price = price;
+
                     $('.section-overview div li').each((index, element) => {
                         const card: Cheerio = $(element);
                         const value: string = card.text();
@@ -71,6 +75,7 @@ export class OtodomScraper extends BaseScraper {
                         if (value[0] === 'Powierzchnia') {
                             adData.area = value[1];
                         }
+
 
                         if (value[0] === 'Liczba pokoi') {
                             const roomsNumber = value[1];
@@ -121,23 +126,4 @@ export class OtodomScraper extends BaseScraper {
     }
 }
 
-/*
-componentDidMount() {
-    axios.get('http://localhost:3000/orders')
-        .then(
-            (result) => {
-                console.log(result.data);
-                this.setState({
-                    isLoaded: true,
-                    orders: result.data
-                });
-            },
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
-            }
-        )
 
-}*/
