@@ -3,7 +3,7 @@ import { pool } from './pg';
 import { QueryResult } from 'pg';
 import { compareTwoStrings } from 'string-similarity';
 
-const LAST_PART_MIN_SCORE: number = 0.9;
+const LAST_PART_MIN_SCORE: number = 1;
 
 type Match = {
     address: Address,
@@ -16,7 +16,7 @@ export class AddressMatcher {
     static match(description: string): Promise<Address> {
         return new Promise<Address>(async (resolve, reject) => {
             const streets: QueryResult = await AddressMatcher.getStreets();
-            const regex = /(ul\.|ulica|ulicy|osiedlu przy ul\.|osiedlu|osiedla|osiedle|al\.|alei|aleje|pl\.|plac)\s*(.+?(?=\s+we\s+|\s+w\s+|\s+na\s+|\s+\-\s+|[.|,|0-9|;|\\|/|\(|\)]|\n|$))/img;
+            const regex = /(ul\.|\s+ul\s+|\s+u\.|\s+ulica[^.]|\s+ulicy[^.]|\s+bloku na[^.]|\s+osiedlu przy ul\.|osiedlu[^.]|\s+osiedla[^.]|\s+osiedle[^.]|al\.|alei|aleje|pl\.|plac(?=[^.])\s+(?=(?!zabaw))|\s+at.(?=Street))\s*(.+?(?=\s+we\s+|\s+w\s+|\s+na\s+|\s+\-\s+|Street|(?<=[^.]{3})\.|[,|0-9|;|\\|/|\(|\)]|\n|$))/img;
 
             let bestMatch: Match | undefined;
             let regexMatch;

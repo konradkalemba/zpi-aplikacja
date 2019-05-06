@@ -3,6 +3,7 @@ import { BaseScraper } from './BaseScraper';
 import { URL } from 'url';
 import request from 'request';
 import cheerio from 'cheerio';
+import { AddressMatcher } from './../determine-address';
 
 export class OlxScraper extends BaseScraper {
     private _pageURL: URL = new URL('https://www.olx.pl/nieruchomosci/mieszkania/wynajem/wroclaw/');
@@ -54,7 +55,7 @@ export class OlxScraper extends BaseScraper {
                 }
             };
 
-            request(options, (error, response, html) => {
+            request(options, async (error, response, html) => {
                 if (!error && response.statusCode === 200) {		
                     const $: CheerioStatic = cheerio.load(html, { decodeEntities: false });
                     
@@ -62,7 +63,12 @@ export class OlxScraper extends BaseScraper {
                         description: $('#textContent').text(),
                         photos: []
                     };
-                        
+
+                    const addressMatched = await AddressMatcher.match(adData.description).catch(e => null);
+                    if (addressMatched) {
+                        adData.address = addressMatched;
+                    }
+
                     $('.offerdescription .img-item img').each((index, element) => {
                         const photo: Cheerio = $(element);
 

@@ -1,0 +1,10 @@
+[Unit]
+Description=Launch scrapers.service
+Requires=scrapers.service
+
+[Timer]
+Unit=scrapers.service
+OnUnitInactiveService=5m
+
+[Install]
+WantedBy=timers.target
