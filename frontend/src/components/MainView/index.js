@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import MapScreen from "../MapView/index.js"
 import {Col, Row} from "react-bootstrap"
 import MapView from "../MapView/index";
-import OrderView from "../OrderView/index";
+import OrderView from "../AdView/index";
 
 
 class MainView extends Component{
@@ -17,12 +17,12 @@ class MainView extends Component{
         return (
             <div className={'container-fluid'}>
                 <Row>
-                    <Col sm={3} fluid style={{ paddingLeft: 2, paddingRight: 1 }}>
+                    <Col sm={4} fluid style={{ paddingLeft: 2, paddingRight: 1 }}>
                         <React.Fragment>
                             <OrderView/>
                         </React.Fragment>
                     </Col>
-                    <Col sm={9} fluid style={{ paddingLeft: 1, paddingRight: 4 }}>
+                    <Col sm={8} fluid style={{ paddingLeft: 1, paddingRight: 4 }}>
                         <React.Fragment>
                             <MapScreen/>
                         </React.Fragment>

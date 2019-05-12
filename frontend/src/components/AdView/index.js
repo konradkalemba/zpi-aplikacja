@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import classes from './style.module.scss';
 // import axios from 'axios';
 // import Button from "react-bootstrap/Button";
-import Order from "../Order/index.js";
+import Order from "../Ad/index.js";
 
 
 class OrdersColumn extends Component {
@@ -19,7 +19,7 @@ class OrdersColumn extends Component {
 
     renderOrders = () => {
         const orders = this.state.orders;
-        console.log("Order = " + orders.length);
+        console.log("Ad = " + orders.length);
         return orders.map(() => (
             <Order/>
         ));
@@ -33,7 +33,10 @@ class OrdersColumn extends Component {
                 <Order/>
                 <Order/>
                 <Order/>
-
+                <Order/>
+                <Order/>
+                <Order/>
+                <Order/>
             </div>
         )
     }
