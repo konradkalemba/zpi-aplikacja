@@ -6,13 +6,13 @@ import room from './room.jpg';
 
 function Order() {
     return (
-        <div className={styles.order}>
+        <div className={styles.ad}>
             <Container>
                 <Row>
-                    <Col sm={6}>
-                        <Image src={room} fluid/>
+                    <Col className={styles.imageCol} sm={6}>
+                        <Image className={styles.adImage} src={room} fluid/>
                     </Col>
-                    <Col sm={6}>
+                    <Col className={styles.infoCol} sm={6}>
                         <h6>Mieszkanie</h6>
                         <h6>Przytuly Apartament w centrum</h6>
                         <p>

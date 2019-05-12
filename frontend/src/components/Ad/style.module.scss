@@ -1,11 +1,19 @@
-.order{
-  padding-top: 10px;
-  padding-bottom: 10px;
+.ad{
+  padding: 1px 1px 1px 1px;
   margin-bottom: 10px;
   background-color: white;
   text-align: left;
+  border-radius: 5px 5px 5px 5px;
 }
 
-.orderRow{
-  max-width: 100%;
+.imageCol{
+  padding: 0 0 0 0;
+}
+
+.adImage{
+  border-radius: 3px 0 0 5px;
+}
+
+.infoCol{
+  padding: 10px 5px 5px 10px;
 }

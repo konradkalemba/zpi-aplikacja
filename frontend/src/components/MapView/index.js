@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import L from 'leaflet';
+import styles from './style.module.scss';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
 
 export default class SimpleExample extends Component{
@@ -13,7 +14,7 @@ export default class SimpleExample extends Component{
         const position = [this.state.lat, this.state.lng];
 
         return (
-            <div id={'map'}>
+            <div className={styles.map}>
                 <Map
                     center={position}
                     zoom={this.state.zoom}>
