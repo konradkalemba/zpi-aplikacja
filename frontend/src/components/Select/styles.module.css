@@ -1,0 +1,18 @@
+.inputItemTitle {
+  width: 30%;
+  color: #355990; }
+
+.selectInputWrapper {
+  display: flex;
+  width: 20%; }
+
+.selectInput {
+  flex: 1;
+  height: 28px;
+  border: 1px solid silver;
+  border-radius: 4px;
+  width: 10%;
+  box-sizing: border-box;
+  color: #969696; }
+
+/*# sourceMappingURL=styles.module.css.map */
