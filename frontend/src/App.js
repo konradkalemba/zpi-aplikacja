@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
-import NavBar from './components/Navbar/Navbar'
-import './App.scss';
+import React from 'react';
+import './App.css';
+import Preferences from './components/Preferences'
+import { Button } from 'react-bootstrap';
+import MainView from "./components/MainView/index.js";
+import Index from "./components/Navbar/index.js";
 
-
-class App extends Component {
-    render() {
-        return (
-            <Router>
-                <div className="App">
-                    <NavBar/>
-                </div>
-            </Router>
-        );
-    }
-}
+const App = () => {
+  return (
+    <div className="App">
+        <Index/>
+        <Preferences/>
+        <MainView/>
+      
+    </div>
+  );
+};
 
 export default App;
