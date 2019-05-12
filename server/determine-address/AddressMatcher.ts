@@ -1,74 +1,70 @@
-import { Address } from './address';
-import { pool } from './pg';
-import { QueryResult } from 'pg';
-import { compareTwoStrings } from 'string-similarity';
+import { compareTwoStrings } from 'string-similarity'
 
-const LAST_PART_MIN_SCORE: number = 1;
+import { Street } from './../entities'
+
+const LAST_PART_MIN_SCORE: number = 1
 
 type Match = {
-    address: Address,
+    street: Street,
     score: number
 }
 
 export class AddressMatcher {
-    private static streets: QueryResult;
+    private static streets: Street[]
 
-    static match(description: string): Promise<Address> {
-        return new Promise<Address>(async (resolve, reject) => {
-            const streets: QueryResult = await AddressMatcher.getStreets();
-            const regex = /(ul\.|\s+ul\s+|\s+u\.|\s+ulica[^.]|\s+ulicy[^.]|\s+bloku na[^.]|\s+osiedlu przy ul\.|osiedlu[^.]|\s+osiedla[^.]|\s+osiedle[^.]|al\.|alei|aleje|pl\.|plac(?=[^.])\s+(?=(?!zabaw))|\s+at.(?=Street))\s*(.+?(?=\s+we\s+|\s+w\s+|\s+na\s+|\s+\-\s+|Street|(?<=[^.]{3})\.|[,|0-9|;|\\|/|\(|\)]|\n|$))/img;
+    static match(description: string): Promise<Street> {
+        return new Promise<Street>(async (resolve, reject) => {
+            const streets: Street[] = await AddressMatcher.getStreets()
+            const regex = /(ul\.|\s+ul\s+|\s+u\.|\s+ulica[^.]|\s+ulicy[^.]|\s+bloku na[^.]|\s+osiedlu przy ul\.|osiedlu[^.]|\s+osiedla[^.]|\s+osiedle[^.]|al\.|alei|aleje|pl\.|plac(?=[^.])\s+(?=(?!zabaw))|\s+at.(?=Street))\s*(.+?(?=\s+we\s+|\s+w\s+|\s+na\s+|\s+\-\s+|Street|(?<=[^.]{3})\.|[,|0-9|;|\\|/|\(|\)]|\n|$))/img
 
-            let bestMatch: Match | undefined;
-            let regexMatch;
+            let bestMatch: Match | undefined
+            let regexMatch
 
             if ((regexMatch = regex.exec(description)) !== null) {
-                const guess: string = regexMatch[2].trim();
+                const guess: string = regexMatch[2].trim()
 
-                for (let j = 0; j < streets.rowCount; j++) {
-                    const row = streets.rows[j];
-                    const parts: string[] = row['nazwa'].split(' ');
-                    let score: number = 0;
+                for (const street of streets) {
+                    const parts: string[] = street.name.split(' ')
+                    let score: number = 0
 
                     if (parts.length > 1 && guess.indexOf(' ') < 0) {
-                        score = compareTwoStrings(parts[parts.length - 1], guess);
+                        score = compareTwoStrings(parts[parts.length - 1], guess)
 
                         if (score < LAST_PART_MIN_SCORE) {
-                            score = compareTwoStrings(row['nazwa'], guess);
+                            score = compareTwoStrings(street.name, guess)
                         }
                     } else {
-                        score = compareTwoStrings(row['nazwa'], guess);
+                        score = compareTwoStrings(street.name, guess)
                     }
                 
                     if (!bestMatch || score > bestMatch.score) {
                         bestMatch = {
-                            address: {
-                                id: row['id_teryt'],
-                                name: row['nazwa']
-                            },
+                            street,
                             score
-                        };
+                        }
                     }
                 }
             }
 
             if (bestMatch) {
-                resolve(bestMatch.address);
+                resolve(bestMatch.street)
             } else {
-                reject(new Error());
+                reject(new Error())
             }
         })
     }
 
     static async getStreets() {
         if (!AddressMatcher.streets) {
-            AddressMatcher.streets = await pool.query(`
-                select u.nazwa, u.id_teryt
-                from ulice u 
-                inner join miasta m on m.id_teryt = u.miasto_id_teryt
-                where m.nazwa = $1;
-            `, ['Wrocław']);
+            AddressMatcher.streets = await Street.find({ cityId: 986283 })
+            // AddressMatcher.streets = await pool.query(`
+            //     select u.nazwa, u.id_teryt
+            //     from ulice u 
+            //     inner join miasta m on m.id_teryt = u.miasto_id_teryt
+            //     where m.nazwa = $1
+            // `, ['Wrocław'])
         }
 
-        return AddressMatcher.streets;
+        return AddressMatcher.streets
     }
-};
+}

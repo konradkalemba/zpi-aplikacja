@@ -1,121 +1,122 @@
-import {AdData} from './AdData';
-import {BaseScraper} from './BaseScraper';
-import {URL} from 'url';
-import request from 'request';
-import cheerio from 'cheerio';
-import { AddressMatcher } from '../determine-address';
+import {BaseScraper} from './BaseScraper'
+import {URL} from 'url'
+import request from 'request'
+import cheerio from 'cheerio'
+import { AddressMatcher } from '../determine-address'
+import { Ad } from './../entities'
 
 export class GratkaScraper extends BaseScraper {
-    private _pageURL: URL = new URL('https://gratka.pl/nieruchomosci/mieszkania/wroclaw/wynajem');
+    private _pageURL: URL = new URL('https://gratka.pl/nieruchomosci/mieszkania/wroclaw/wynajem')
 
     getAdsURLs(): Promise<URL[]> {
         return new Promise<URL[]>((resolve, reject) => {
-            let adsURLs: URL[] = [];
+            let adsURLs: URL[] = []
 
             request(this._pageURL.href, (error, response, html) => {
                 if (!error && response.statusCode === 200) {
 
-                    const $: CheerioStatic = cheerio.load(html, {decodeEntities: false});
+                    const $: CheerioStatic = cheerio.load(html, {decodeEntities: false})
 
                     $('#leftColumn article').each(function (index, element) {
-                        const ad: Cheerio = $(element);
-                        const adURL: URL = new URL(ad.attr('data-href'));
-                        const pageName: string = $('.pagination__nextPage').attr('href');
+                        const ad: Cheerio = $(element)
+                        const adURL: URL = new URL(ad.attr('data-href'))
+                        const pageName: string = $('.pagination__nextPage').attr('href')
 
-                        adsURLs.push(adURL);
-                    });
+                        adsURLs.push(adURL)
+                    })
                     if ($('.pagination__nextPage').attr('href')) {
-                        this._pageURL = new URL($('.pagination__nextPage').attr('href'));
+                        this._pageURL = new URL($('.pagination__nextPage').attr('href'))
                     } else {
-                        this._hasNextPage = false;
+                        this._hasNextPage = false
                     }
-                    resolve(adsURLs);
+                    resolve(adsURLs)
                 } else {
-                    reject(html);
+                    reject(html)
                 }
-            });
-        });
+            })
+        })
     }
     protected getOwnerName($: CheerioStatic): string {
-        var scripts = $('script').get();
-        let name: string = '';
+        var scripts = $('script').get()
+        let name: string = ''
         scripts.forEach(function (element, index) {
             if (element.children[0] !== undefined) {
-                var reg = /context: \'contactForm\'/;
+                var reg = /context: \'contactForm\'/
                 if (element.children[0].data.match(reg) !== null) {
-                    let scriptString = element.children[0].data;
-                    let nameRegex = /"person": ".+"/;
-                    let found = scriptString.match(nameRegex)[0];
-                    name = found.slice(11, found.length - 1);
+                    let scriptString = element.children[0].data
+                    let nameRegex = /"person": ".+"/
+                    let found = scriptString.match(nameRegex)
+                    if (found) {
+                        name = found[0].slice(11, found[0].length - 1)
+                    }
                 }
             }
-        });
-        return name;
+        })
+        return name
     }
 
-    protected getAdDataFromURL(url: URL): Promise<AdData> {
-        return new Promise<AdData>((resolve, reject) => {
+    protected getAdFromURL(url: URL): Promise<Ad> {
+        return new Promise<Ad>((resolve, reject) => {
             request(url.href, async (error, response, html) => {
                 if (!error && response.statusCode === 200) {
-                    const $: CheerioStatic = cheerio.load(html, { normalizeWhitespace: false, xmlMode: false, decodeEntities: true });
-                    let adData: AdData = {
-                        url: url.href,
-                        photos: [],
-                        description: $('.description__rolled').text(),
-                        price: $('.priceInfo__value').text().trim().replace(/\s/g, ""),
-                        ownerName: this.getOwnerName($),
-                    };
+                    const $: CheerioStatic = cheerio.load(html, { normalizeWhitespace: false, xmlMode: false, decodeEntities: true })
+                    let ad = new Ad()
+                    
+                    ad.url = url.href
+                    ad.description = $('.description__rolled').text().trim()
+                    ad.price = parseFloat($('.priceInfo__value').text().trim().replace(/\s/g, ''))
+                    ad.ownerName = this.getOwnerName($)
 
                     $("meta[property='og:image']").each((index, element) => {
-                        const photoMetaTag: Cheerio = $(element);
-                        adData.photos.push(photoMetaTag.attr("content"));
-                    });
+                        const photoMetaTag: Cheerio = $(element)
+                        // ad.photos.push(photoMetaTag.attr("content"))
+                    })
 
-                    const addressMatched = await AddressMatcher.match(adData.description).catch(e => null);
+                    const addressMatched = await AddressMatcher.match(ad.description).catch(e => null)
                     if (addressMatched) {
-                        adData.address = addressMatched;
+                        ad.street = addressMatched
                     }
 
                     $('.parameters__rolled li').each(function (index, element) {
-                        const parameter: Cheerio = $(element);
-                        const parameterName: string = parameter.children('span').text();
-                        const parameterValue: string = parameter.children('b').text().trim();
+                        const parameter: Cheerio = $(element)
+                        const parameterName: string = parameter.children('span').text()
+                        const parameterValue: string = parameter.children('b').text().trim()
 
                         if (parameterName === "Opłaty (czynsz administracyjny, media)") {
-                            adData.additionalFees = parameterValue;
+                            ad.additionalFees = parseFloat(parameterValue)
                         }
                         if (parameterName === "Powierzchnia w m2") {
-                            adData.area = parameterValue;
+                            ad.area = parseFloat(parameterValue)
                         }
                         if (parameterName === "Liczba pokoi") {
-                            adData.roomsNumber = parameterValue;
+                            ad.roomsNumber = parseInt(parameterValue)
                         }
                         if (parameterName === "Piętro") {
-                            adData.floor = parameterValue;
+                            ad.floor = parameterValue
                         }
                         if (parameterName === "Rok budowy") {
-                            adData.buildingYear = parameterValue;
+                            ad.buildingYear = parameterValue
                         }
                         if (parameterName === "Liczba pięter w budynku") {
-                            adData.floorsNumber = parameterValue;
+                            ad.floorsNumber = parameterValue
                         }
                         if (parameterName === "Rodzaj zabudowy") {
-                            adData.buildingType = parameterValue;
+                            ad.buildingType = parameterValue
                         }
                         if (parameterName === "Okna") {
-                            adData.windows = parameterValue;
+                            ad.windows = parameterValue
                         }
                         if (parameterName === "Stan wykończenia") {
-                            adData.finishing = parameterValue;
+                            ad.finishing = parameterValue
                         }
                         if (parameterName === "Materiał budynku") {
-                            adData.buildingMaterial = parameterValue;
+                            ad.buildingMaterial = parameterValue
                         }
-                    });
-                    console.log(adData);
-                    resolve(adData);
+                    })
+
+                    resolve(ad)
                 } else {
-                    reject('request error = ' + error);
+                    reject('request error = ' + error)
                 }
             })
         })

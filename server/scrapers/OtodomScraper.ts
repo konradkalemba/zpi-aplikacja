@@ -1,134 +1,133 @@
-import { AdData } from './AdData';
-import { BaseScraper } from './BaseScraper';
-import { URL } from 'url';
-import request from 'request';
-import cheerio from 'cheerio';
-import { AddressMatcher } from '../determine-address';
+import { BaseScraper } from './BaseScraper'
+import { URL } from 'url'
+import request from 'request'
+import cheerio from 'cheerio'
+import { AddressMatcher } from '../determine-address'
+import { Ad } from '../entities';
 
 export class OtodomScraper extends BaseScraper {
-    private _pageURL: URL = new URL('https://www.otodom.pl/wynajem/mieszkanie/wroclaw/');
+    private _pageURL: URL = new URL('https://www.otodom.pl/wynajem/mieszkanie/wroclaw/')
 
     getAdsURLs(): Promise<URL[]> {
         return new Promise<URL[]>((resolve, reject) => {
-            let adsURLs: URL[] = [];
+            let adsURLs: URL[] = []
             let options = {
                 url: this._pageURL.href,
                 headers: {
                     'User-Agent': 'ok'
                 }
-            };
+            }
 
             request(options, (error, response, html) => {
                 if (!error && response.statusCode === 200) {
-                    const $: CheerioStatic = cheerio.load(html, { decodeEntities: false });
+                    const $: CheerioStatic = cheerio.load(html, { decodeEntities: false })
 
                     $('.row .section-listing__row-content article').each((index, element) => {
-                        const ad: Cheerio = $(element);
-                        const adURL: URL = new URL(ad.attr('data-url'));
-                        adsURLs.push(adURL);
-                    });
+                        const ad: Cheerio = $(element)
+                        const adURL: URL = new URL(ad.attr('data-url'))
+                        adsURLs.push(adURL)
+                    })
 
                     if ($('.pager-next a').attr('href')) {
-                        this._pageURL = new URL($('.pager-next a').attr('href'));
+                        this._pageURL = new URL($('.pager-next a').attr('href'))
                     } else {
-                        this._hasNextPage = false;
+                        this._hasNextPage = false
                     }
-                    resolve(adsURLs);
+                    resolve(adsURLs)
                 } else {
-                    reject(html);
+                    reject(html)
                 }
-            });
-        });
+            })
+        })
     }
 
-    getAdDataFromURL(url: URL): Promise<AdData> {
-        return new Promise<AdData>((resolve, reject) => {
+    getAdFromURL(url: URL): Promise<Ad> {
+        return new Promise<Ad>((resolve, reject) => {
             const options = {
                 url: url.href,
                 headers: {
                     'User-Agent': 'ok'
                 }
-            };
+            }
 
             request(options, async (error, response, html) => {
                 if (!error && response.statusCode === 200) {
-                    const $: CheerioStatic = cheerio.load(html, { decodeEntities: false });
+                    const $: CheerioStatic = cheerio.load(html, { decodeEntities: false })
 
-                    let adData: AdData = {
-                        description: $('.section-description p').text(),
-                        photos: []
-                    };
+                    let ad = new Ad()
                     
-                    const addressMatched = await AddressMatcher.match(adData.description).catch(e => null);
+                    ad.url = url.href
+                    ad.description = $('.section-description p').text().trim()
+                    
+                    const addressMatched = await AddressMatcher.match(ad.description).catch(e => null)
                     if (addressMatched) {
-                        adData.address = addressMatched;
+                        ad.street = addressMatched
                     }
 
                     $('.slick-list picture img').each((index, element) => {
-                        const photo: Cheerio = $(element);
+                        const photo: Cheerio = $(element)
 
-                        adData.photos.push(photo.attr('src'));
-                    });
+                        // ad.photos.push(photo.attr('src'))
+                    })
 
-                    const price = $('.css-7ryazv-AdHeader-className').text();
-                    //console.log("Price = "+price.trim());
-                    adData.price = price;
+                    const price = $('.css-7ryazv-AdHeader-className').text()
+                    //console.log("Price = "+price.trim())
+                    ad.price = parseFloat(price)
 
                     $('.section-overview div li').each((index, element) => {
-                        const card: Cheerio = $(element);
-                        const value: string = card.text();
+                        const card: Cheerio = $(element)
+                        const value: string = card.text()
 
                         if (value[0] === 'Powierzchnia') {
-                            adData.area = value[1];
+                            ad.area = parseFloat(value[1])
                         }
 
 
                         if (value[0] === 'Liczba pokoi') {
-                            const roomsNumber = value[1];
+                            const roomsNumber = value[1]
 
                             if (roomsNumber == 'kawalerka') {
-                                adData.roomsNumber = 1;
+                                ad.roomsNumber = 1
                             } else {
-                                adData.roomsNumber = roomsNumber.replace(/\D/g, '');
+                                ad.roomsNumber = parseInt(roomsNumber.replace(/\D/g, ''))
                             }
                         }
 
                         if (value[0] === 'Rodzaj zabudowy') {
-                            adData.buildingType = value[1];
+                            ad.buildingType = value[1]
                         }
 
                         if (value[0] === 'Piętro') {
-                            adData.floor = value[1];
+                            ad.floor = value[1]
                         }
 
                         if (value[0] === 'Liczba pięter') {
-                            adData.floorsNumber = value[1];
+                            ad.floorsNumber = value[1]
                         }
 
                         if (value[0] === 'Okna') {
-                            adData.windows = value[1];
+                            ad.windows = value[1]
                         }
 
                         if (value[0] === 'Stan wykończenia') {
-                            adData.finishing = value[1];
+                            ad.finishing = value[1]
                         }
 
                         if (value[0] === 'Materiał budynku') {
-                            adData.buildingMaterial = value[1];
+                            ad.buildingMaterial = value[1]
                         }
 
                         if (value[0] === 'Rok budowy') {
-                            adData.buildingYear = value[1];
+                            ad.buildingYear = value[1]
                         }
-                    });
+                    })
 
-                    console.log(adData);
-                    resolve(adData);
+                    resolve(ad)
                 } else {
-                    reject('request error = ' + error);
+                    reject('request error = ' + error)
                 }
-            });
-        });
+            })
+        })
     }
 }
 

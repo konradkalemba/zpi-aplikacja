@@ -10,13 +10,13 @@ export default class Ad extends BaseEntity {
     description: string;
 
     @Column({ name: 'powierzchnia' })
-    area: string;
+    area: number;
     
     @Column({ name: 'dodatkowe_oplaty' })
-    additionalFees: string;
+    additionalFees: number;
 
     @Column({ name: 'liczba_pokoi' })
-    roomsNumber: string;
+    roomsNumber: number;
 
     @Column({ name: 'rodzaj_zabudowy' })
     buildingType: string;
@@ -49,7 +49,10 @@ export default class Ad extends BaseEntity {
     finishing: string;
     
     @Column({ name: 'czynsz' })
-    price: string;
+    price: number;
+    
+    @Column()
+    url: string;
 
     @ManyToOne(type => Street, (street: Street) => street.ads)
     @JoinColumn([
