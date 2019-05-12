@@ -1,0 +1,9 @@
+.textInput {
+  flex: 1;
+  height: 28px;
+  border: 1px solid silver;
+  border-radius: 4px;
+  width: 10%;
+  box-sizing: border-box; }
+
+/*# sourceMappingURL=styles.module.css.map */
