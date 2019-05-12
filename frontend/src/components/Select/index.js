@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./styles.module.scss";
 import {Field} from "formik";
+import { FormControl, InputGroup } from 'react-bootstrap';
+
 
 const Select = ({
                     field: {name, value, onChange, onBlur},
@@ -10,6 +12,7 @@ const Select = ({
                     placeholderMsg
                 }) => {
     return (
+
         <Field
             component="select"
             name={name}
