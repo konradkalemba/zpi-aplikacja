@@ -80,6 +80,8 @@ export class GratkaScraper extends BaseScraper {
                         ad.photos.push(photo)
                     })
 
+                    ad.portalName = $('.sticker__title').text();
+
                     const addressMatched = await AddressMatcher.match(ad.description).catch(e => null)
                     if (addressMatched) {
                         ad.street = addressMatched
