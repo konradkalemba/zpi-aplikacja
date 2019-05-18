@@ -6,3 +6,4 @@
 **/compiled
 **/build
 .idea
+zpi-pg-ca.crt
