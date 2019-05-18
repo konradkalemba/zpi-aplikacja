@@ -100,7 +100,7 @@ export class OlxScraper extends BaseScraper {
                             ad.buildingType = card.children('.value').text().trim()
                         }
 
-                        if (value === 'Piętro') {
+                        if (value === 'Poziom') {
                             ad.floor = card.children('.value').text().toLowerCase().trim()
                         }
 
