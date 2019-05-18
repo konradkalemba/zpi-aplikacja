@@ -4,6 +4,7 @@ import request from 'request'
 import cheerio from 'cheerio'
 import { AddressMatcher } from '../determine-address'
 import { Ad, Photo } from './../entities'
+import { AdSource } from '../entities/Ad'
 
 export class GratkaScraper extends BaseScraper {
     private _pageURL: URL = new URL('https://gratka.pl/nieruchomosci/mieszkania/wroclaw/wynajem')
@@ -61,6 +62,8 @@ export class GratkaScraper extends BaseScraper {
                 if (!error && response.statusCode === 200) {
                     const $: CheerioStatic = cheerio.load(html, { normalizeWhitespace: false, xmlMode: false, decodeEntities: true })
                     let ad = new Ad()
+
+                    ad.source = AdSource.Gratka
                     ad.photos = []
                     ad.url = url.href
                     ad.description = $('.description__rolled').text().trim()

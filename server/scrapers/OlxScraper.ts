@@ -4,6 +4,7 @@ import request from 'request'
 import cheerio from 'cheerio'
 import { AddressMatcher } from './../determine-address'
 import { Ad, Photo } from '../entities'
+import { AdSource } from '../entities/Ad'
 
 export class OlxScraper extends BaseScraper {
     private _pageURL: URL = new URL('https://www.olx.pl/nieruchomosci/mieszkania/wynajem/wroclaw/')
@@ -63,7 +64,7 @@ export class OlxScraper extends BaseScraper {
                     ad.photos = []
                     ad.url = url.href
                     ad.description = $('#textContent').text().trim()
-
+                    ad.source = AdSource.Olx
 
                     const addressMatched = await AddressMatcher.match(ad.description).catch(e => null)
                     if (addressMatched) {

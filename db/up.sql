@@ -63,5 +63,10 @@ create table zdjecia (
     id int generated always as identity primary key,
     ogloszenie_id int,
     sciezka text,
-    foreign key (ogloszenie_id) references ogloszenia(id)
+    foreign key (ogloszenie_id) references ogloszenia(id) on delete cascade
 );
+
+
+alter table ogloszenia
+    add column tytul varchar(255) not null,
+    add column zrodlo varchar(50);

@@ -1,11 +1,20 @@
 import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
 import { Street, Photo } from './index'
 
+export enum AdSource {
+    Olx = 'olx',
+    Gratka = 'gratka',
+    Otodom = 'otodom'
+}
+
 @Entity('ogloszenia')
 export default class Ad extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
     
+    @Column({ name: 'tytul' })
+    title: string;
+
     @Column({ name: 'opis' })
     description: string;
 
@@ -53,6 +62,9 @@ export default class Ad extends BaseEntity {
     
     @Column()
     url: string;
+
+    @Column({ name: 'zrodlo' })
+    source: AdSource;
 
     @ManyToOne(type => Street, (street: Street) => street.ads)
     @JoinColumn([

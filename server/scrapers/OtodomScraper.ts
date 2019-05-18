@@ -3,7 +3,8 @@ import { URL } from 'url'
 import request from 'request'
 import cheerio from 'cheerio'
 import { AddressMatcher } from '../determine-address'
-import { Ad, Photo } from '../entities';
+import { Ad, Photo } from '../entities'
+import { AdSource } from '../entities/Ad'
 
 export class OtodomScraper extends BaseScraper {
     private _pageURL: URL = new URL('https://www.otodom.pl/wynajem/mieszkanie/wroclaw/')
@@ -59,7 +60,8 @@ export class OtodomScraper extends BaseScraper {
                     ad.photos = []
                     ad.url = url.href
                     ad.description = $('.section-description p').text().trim()
-                    
+                    ad.source = AdSource.Otodom
+
                     const addressMatched = await AddressMatcher.match(ad.description).catch(e => null)
                     if (addressMatched) {
                         ad.street = addressMatched
