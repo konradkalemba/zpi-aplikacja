@@ -16,6 +16,11 @@ const server = http.createServer(router)
 
 router.use(parser.urlencoded({ extended: true }))
 router.use(parser.json())
+router.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 // Register defined routes
 for (const { path, method, handle } of routes) {

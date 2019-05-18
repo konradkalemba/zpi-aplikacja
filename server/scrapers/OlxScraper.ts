@@ -89,7 +89,7 @@ export class OlxScraper extends BaseScraper {
                         if (value === 'Liczba pokoi') {
                             const roomsNumber = card.children('.value').text().trim()
 
-                            if (roomsNumber == 'kawalerka') {
+                            if (roomsNumber == 'kawalerka' || roomsNumber == 'Kawalerka') {
                                 ad.roomsNumber = 1
                             } else {
                                 ad.roomsNumber = parseInt(roomsNumber.replace(/\D/g, ''))
