@@ -64,7 +64,7 @@ export class OlxScraper extends BaseScraper {
                     ad.url = url.href
                     ad.description = $('#textContent').text().trim()
 
-                    ad.portalName = $('.offer-titlebox h1').text().trim()
+                    ad.title = $('.offer-titlebox h1').text().trim()
 
                     const addressMatched = await AddressMatcher.match(ad.description).catch(e => null)
                     if (addressMatched) {
