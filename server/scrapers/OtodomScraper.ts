@@ -70,21 +70,22 @@ export class OtodomScraper extends BaseScraper {
                         // ad.photos.push(photo.attr('src'))
                     })
 
-                    const price = $('.css-7ryazv-AdHeader-className').text()
-                    //console.log("Price = "+price.trim())
-                    ad.price = parseFloat(price)
+                    const price = $('.css-c0ipkw-AdHeader').text();
+                    //remove all non-numeric characters
+                    ad.price = parseFloat(price.replace(/\D/g,''));
 
                     $('.section-overview div li').each((index, element) => {
-                        const card: Cheerio = $(element)
-                        const value: string = card.text()
+                        const parameter: Cheerio = $(element);
+                        const parameterName: string = parameter.text().substring(0, parameter.text().indexOf(':')+1);
+                        const parameterValue: string = parameter.text().substring(parameter.text().indexOf(':')+1);
 
-                        if (value[0] === 'Powierzchnia') {
-                            ad.area = parseFloat(value[1])
+                        if (parameterName === 'Powierzchnia:') {
+                            ad.area = parseFloat(parameterValue.trim())
                         }
 
 
-                        if (value[0] === 'Liczba pokoi') {
-                            const roomsNumber = value[1]
+                        if (parameterName === 'Liczba pokoi:') {
+                            const roomsNumber = parameterValue.trim();
 
                             if (roomsNumber == 'kawalerka') {
                                 ad.roomsNumber = 1
@@ -93,32 +94,32 @@ export class OtodomScraper extends BaseScraper {
                             }
                         }
 
-                        if (value[0] === 'Rodzaj zabudowy') {
-                            ad.buildingType = value[1]
+                        if (parameterName === 'Rodzaj zabudowy:') {
+                            ad.buildingType = parameterValue.trim()
                         }
 
-                        if (value[0] === 'Piętro') {
-                            ad.floor = value[1]
+                        if (parameterName === 'Piętro:') {
+                            ad.floor = parameterValue.trim()
                         }
 
-                        if (value[0] === 'Liczba pięter') {
-                            ad.floorsNumber = value[1]
+                        if (parameterName === 'Liczba pięter:') {
+                            ad.floorsNumber = parameterValue.trim()
                         }
 
-                        if (value[0] === 'Okna') {
-                            ad.windows = value[1]
+                        if (parameterName === 'Okna:') {
+                            ad.windows = parameterValue.trim()
                         }
 
-                        if (value[0] === 'Stan wykończenia') {
-                            ad.finishing = value[1]
+                        // if (parameterName === 'Stan wykończenia:') {
+                        //     ad.finishing = parameterValue
+                        // }
+
+                        if (parameterName === 'Materiał budynku:') {
+                            ad.buildingMaterial = parameterValue.trim()
                         }
 
-                        if (value[0] === 'Materiał budynku') {
-                            ad.buildingMaterial = value[1]
-                        }
-
-                        if (value[0] === 'Rok budowy') {
-                            ad.buildingYear = value[1]
+                        if (parameterName === 'Rok budowy:') {
+                            ad.buildingYear = parameterValue.trim()
                         }
                     })
 

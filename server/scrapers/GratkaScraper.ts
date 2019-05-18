@@ -2,8 +2,8 @@ import {BaseScraper} from './BaseScraper'
 import {URL} from 'url'
 import request from 'request'
 import cheerio from 'cheerio'
-import { AddressMatcher } from '../determine-address'
-import { Ad } from './../entities'
+import {AddressMatcher} from '../determine-address'
+import {Ad} from './../entities'
 
 export class GratkaScraper extends BaseScraper {
     private _pageURL: URL = new URL('https://gratka.pl/nieruchomosci/mieszkania/wroclaw/wynajem')
@@ -36,6 +36,7 @@ export class GratkaScraper extends BaseScraper {
             })
         })
     }
+
     protected getOwnerName($: CheerioStatic): string {
         var scripts = $('script').get()
         let name: string = ''
@@ -59,9 +60,13 @@ export class GratkaScraper extends BaseScraper {
         return new Promise<Ad>((resolve, reject) => {
             request(url.href, async (error, response, html) => {
                 if (!error && response.statusCode === 200) {
-                    const $: CheerioStatic = cheerio.load(html, { normalizeWhitespace: false, xmlMode: false, decodeEntities: true })
+                    const $: CheerioStatic = cheerio.load(html, {
+                        normalizeWhitespace: false,
+                        xmlMode: false,
+                        decodeEntities: true
+                    })
                     let ad = new Ad()
-                    
+
                     ad.url = url.href
                     ad.description = $('.description__rolled').text().trim()
                     ad.price = parseFloat($('.priceInfo__value').text().trim().replace(/\s/g, ''))
@@ -89,7 +94,11 @@ export class GratkaScraper extends BaseScraper {
                             ad.area = parseFloat(parameterValue)
                         }
                         if (parameterName === "Liczba pokoi") {
-                            ad.roomsNumber = parseInt(parameterValue)
+                            if (parameterValue == 'kawalerka' || parameterValue == 'Kawalerka') {
+                                ad.roomsNumber = 1
+                            } else {
+                                ad.roomsNumber = parseInt(parameterValue.replace(/\D/g, ''))
+                            }
                         }
                         if (parameterName === "Piętro") {
                             ad.floor = parameterValue
@@ -98,7 +107,11 @@ export class GratkaScraper extends BaseScraper {
                             ad.buildingYear = parameterValue
                         }
                         if (parameterName === "Liczba pięter w budynku") {
-                            ad.floorsNumber = parameterValue
+                            if (parameterValue == '0 (parter)') {
+                                ad.floorsNumber = '0'
+                            } else {
+                                ad.floorsNumber = parameterValue
+                            }
                         }
                         if (parameterName === "Rodzaj zabudowy") {
                             ad.buildingType = parameterValue
