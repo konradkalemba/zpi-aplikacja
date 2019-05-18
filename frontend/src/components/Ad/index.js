@@ -4,7 +4,7 @@ import React from "react";
 import room from './room.jpg';
 
 
-function Order() {
+const Ad = props => {
     return (
         <div className={styles.ad}>
             <Container>
@@ -16,20 +16,21 @@ function Order() {
                         <h6>MIESZKANIE</h6>
                         <h6 className={styles.adTitle}>Przytuly Apartament w centrum</h6>
                         <p>
-                            Wrocław, ul. Centralna 3/23
+                            {props.ad.area}
                         </p>
                         <hr/>
                         <ul className={styles.dashed}>
-                            <li> Powierzchnia: <strong>44 m2</strong></li>
-                            <li> Liczba pokoi: <strong>4</strong></li>
-                            <li> Piętro: <strong>2</strong></li>
-                            <li> Rok budowy: <strong>2011</strong></li>
+                            <li> Powierzchnia: <strong>{props.ad.area} m2</strong></li>
+                            <li> Liczba pokoi: <strong>{props.ad.roomsNumber}</strong></li>
+                            <li> Piętro: <strong>{props.ad.floor}</strong></li>
+                            <li> Rok budowy: <strong>{props.ad.buildingYear}</strong></li>
+                            <li> Cena: <strong>{props.ad.price}</strong></li>
                         </ul>
                     </Col>
                 </Row>
             </Container>
         </div>
     );
-}
+};
 
-export default Order;
+export default Ad;
