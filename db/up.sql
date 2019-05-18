@@ -61,7 +61,7 @@ create table ogloszenia (
 
 create table zdjecia (
     id int generated always as identity primary key,
-    ogloszenie_id int foreign key references ogloszenia(id),
-    zdj bytea not null,
-    nazwa_pliku text
+    ogloszenie_id int,
+    sciezka text,
+    foreign key (ogloszenie_id) references ogloszenia(id)
 );

@@ -19,6 +19,10 @@ export abstract class BaseScraper implements Scraper {
             console.log(ad)
 
             await ad.save()
+            for (const photo of ad.photos) {
+                photo.ad = ad
+                await photo.save()
+            }
         }
     }
 

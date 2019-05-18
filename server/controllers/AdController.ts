@@ -16,7 +16,7 @@ export default class AdController {
      * @memberof AdController
      */
     async index (request: Request, response: Response) {
-        const ads = await Ad.find({ relations: ['street'] })
+        const ads = await Ad.find({ relations: ['street', 'photos'] })
         
         response.send(ads)
     }

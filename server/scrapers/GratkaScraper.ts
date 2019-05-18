@@ -3,7 +3,7 @@ import {URL} from 'url'
 import request from 'request'
 import cheerio from 'cheerio'
 import { AddressMatcher } from '../determine-address'
-import { Ad } from './../entities'
+import { Ad, Photo } from './../entities'
 
 export class GratkaScraper extends BaseScraper {
     private _pageURL: URL = new URL('https://gratka.pl/nieruchomosci/mieszkania/wroclaw/wynajem')
@@ -61,7 +61,7 @@ export class GratkaScraper extends BaseScraper {
                 if (!error && response.statusCode === 200) {
                     const $: CheerioStatic = cheerio.load(html, { normalizeWhitespace: false, xmlMode: false, decodeEntities: true })
                     let ad = new Ad()
-                    
+                    ad.photos = []
                     ad.url = url.href
                     ad.description = $('.description__rolled').text().trim()
                     ad.price = parseFloat($('.priceInfo__value').text().trim().replace(/\s/g, ''))
@@ -69,7 +69,10 @@ export class GratkaScraper extends BaseScraper {
 
                     $("meta[property='og:image']").each((index, element) => {
                         const photoMetaTag: Cheerio = $(element)
-                        // ad.photos.push(photoMetaTag.attr("content"))
+                        const photo = new Photo()
+                        photo.path = photoMetaTag.attr("content")
+
+                        ad.photos.push(photo)
                     })
 
                     const addressMatched = await AddressMatcher.match(ad.description).catch(e => null)
@@ -98,7 +101,7 @@ export class GratkaScraper extends BaseScraper {
                             ad.buildingYear = parameterValue
                         }
                         if (parameterName === "Liczba pięter w budynku") {
-                            ad.floorsNumber = parameterValue
+                            ad.floorsNumber = parseInt(parameterValue)
                         }
                         if (parameterName === "Rodzaj zabudowy") {
                             ad.buildingType = parameterValue
