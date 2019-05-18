@@ -2,6 +2,11 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
   -webkit-appearance: none;
   margin: 0; }
 
+.App{
+  background-image: url(./assets/images/background.png);
+}
+
+
 input[type="number"] {
   -moz-appearance: textfield; }
 
