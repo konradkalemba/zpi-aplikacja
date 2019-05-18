@@ -132,7 +132,7 @@ class Preferences extends Component {
                 <PreferenceItem
                   children={
                     <button type="submit" className={styles.searchButton} disabled={isSubmitting}>
-                      Search
+                      Filtruj
                     </button>
                   }
                 />
