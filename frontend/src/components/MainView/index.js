@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import MapScreen from "../MapView/index.js"
 import {Col, Row} from "react-bootstrap"
 import MapView from "../MapView/index";
-import OrderView from "../AdView/index";
+import AdView from "../AdView/index";
 
 
 class MainView extends Component{
@@ -19,7 +19,7 @@ class MainView extends Component{
                 <Row>
                     <Col sm={4} fluid style={{ paddingLeft: 2, paddingRight: 1 }}>
                         <React.Fragment>
-                            <OrderView/>
+                            <AdView/>
                         </React.Fragment>
                     </Col>
                     <Col sm={8} fluid style={{ paddingLeft: 1, paddingRight: 4 }}>
