@@ -46,14 +46,6 @@ class AdView extends Component {
     return (
       <div className={classes.ordersColumn}>
         {this.renderAds()}
-        {/*<Order/>*/}
-        {/*<Order/>*/}
-        {/*<Order/>*/}
-        {/*<Order/>*/}
-        {/*<Order/>*/}
-        {/*<Order/>*/}
-        {/*<Order/>*/}
-        {/*<Order/>*/}
       </div>
     )
   }

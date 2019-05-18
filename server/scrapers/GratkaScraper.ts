@@ -3,7 +3,7 @@ import {URL} from 'url'
 import request from 'request'
 import cheerio from 'cheerio'
 import {AddressMatcher} from '../determine-address'
-import {Ad} from './../entities'
+import {Ad, Photo} from './../entities'
 
 export class GratkaScraper extends BaseScraper {
     private _pageURL: URL = new URL('https://gratka.pl/nieruchomosci/mieszkania/wroclaw/wynajem')

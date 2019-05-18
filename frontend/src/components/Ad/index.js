@@ -11,7 +11,7 @@ const Ad = props => {
         <Row>
           <Col className={styles.imageCol} sm={6}>
             <a href={props.ad.url}>
-              <Image className={styles.adImage} src={room} fluid/>
+              <Image className={styles.adImage} src={props.ad.photos.length > 0 ? props.ad.photos[props.ad.photos.length-1].path : room} fluid/>
             </a>
           </Col>
           <Col className={styles.infoCol} sm={6}>

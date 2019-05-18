@@ -105,8 +105,8 @@ export class OtodomScraper extends BaseScraper {
                             ad.floor = parameterValue.trim()
                         }
 
-                        if (value[0] === 'Liczba pięter') {
-                            ad.floorsNumber = parseInt(value[1])
+                        if (parameterName === 'Liczba pięter') {
+                            ad.floorsNumber = parseInt(parameterValue)
                         }
 
                         if (parameterName === 'Okna:') {
