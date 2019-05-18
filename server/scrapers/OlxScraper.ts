@@ -3,7 +3,7 @@ import { URL } from 'url'
 import request from 'request'
 import cheerio from 'cheerio'
 import { AddressMatcher } from './../determine-address'
-import { Ad } from '../entities'
+import { Ad, Photo } from '../entities'
 
 export class OlxScraper extends BaseScraper {
     private _pageURL: URL = new URL('https://www.olx.pl/nieruchomosci/mieszkania/wynajem/wroclaw/')
@@ -60,6 +60,7 @@ export class OlxScraper extends BaseScraper {
                     const $: CheerioStatic = cheerio.load(html, { decodeEntities: false })
                     let ad = new Ad()
                     
+                    ad.photos = []
                     ad.url = url.href
                     ad.description = $('#textContent').text().trim()
 
@@ -70,9 +71,11 @@ export class OlxScraper extends BaseScraper {
                     }
 
                     $('.offerdescription .img-item img').each((index, element) => {
-                        const photo: Cheerio = $(element)
+                        const imgTag: Cheerio = $(element)
+                        const photo = new Photo()
+                        photo.path = imgTag.attr('src')
 
-                        // ad.photos.push(photo.attr('src'))
+                        ad.photos.push(photo)
                     })
 
                     $('.descriptioncontent table tbody tr td tr').each((index, element) => {
@@ -102,7 +105,7 @@ export class OlxScraper extends BaseScraper {
                         }
 
                         if (value === 'Liczba pięter') {
-                            ad.floorsNumber = card.children('.value').text().toLowerCase().trim()
+                            ad.floorsNumber = parseInt(card.children('.value').text().toLowerCase().trim())
                         }
 
                         if (value === 'Okna') {

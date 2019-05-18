@@ -3,7 +3,7 @@ import { URL } from 'url'
 import request from 'request'
 import cheerio from 'cheerio'
 import { AddressMatcher } from '../determine-address'
-import { Ad } from '../entities';
+import { Ad, Photo } from '../entities';
 
 export class OtodomScraper extends BaseScraper {
     private _pageURL: URL = new URL('https://www.otodom.pl/wynajem/mieszkanie/wroclaw/')
@@ -56,6 +56,7 @@ export class OtodomScraper extends BaseScraper {
 
                     let ad = new Ad()
                     
+                    ad.photos = []
                     ad.url = url.href
                     ad.description = $('.section-description p').text().trim()
                     
@@ -65,9 +66,11 @@ export class OtodomScraper extends BaseScraper {
                     }
 
                     $('.slick-list picture img').each((index, element) => {
-                        const photo: Cheerio = $(element)
+                        const imgTag: Cheerio = $(element)
+                        const photo = new Photo()
+                        photo.path = imgTag.attr('src')
 
-                        // ad.photos.push(photo.attr('src'))
+                        ad.photos.push(photo)
                     })
 
                     const price = $('.css-7ryazv-AdHeader-className').text()
@@ -102,7 +105,7 @@ export class OtodomScraper extends BaseScraper {
                         }
 
                         if (value[0] === 'Liczba pięter') {
-                            ad.floorsNumber = value[1]
+                            ad.floorsNumber = parseInt(value[1])
                         }
 
                         if (value[0] === 'Okna') {

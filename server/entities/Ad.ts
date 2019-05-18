@@ -1,5 +1,5 @@
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, Any, ManyToOne, JoinColumn } from 'typeorm'
-import { Street } from './index'
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
+import { Street, Photo } from './index'
 
 @Entity('ogloszenia')
 export default class Ad extends BaseEntity {
@@ -25,7 +25,7 @@ export default class Ad extends BaseEntity {
     floor: string;
 
     @Column({ name: 'liczba_pieter' })
-    floorsNumber: string;
+    floorsNumber: number;
 
     @Column({ name: 'poziom_opis' })
     levelDescription: string;
@@ -60,4 +60,7 @@ export default class Ad extends BaseEntity {
         { name: 'miasto_id', referencedColumnName: 'cityId' }
     ])
     street: Street;
+
+    @OneToMany(() => Photo, (photo: Photo) => photo.ad)
+    photos: Photo[];
 }
