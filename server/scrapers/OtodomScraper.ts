@@ -62,6 +62,9 @@ export class OtodomScraper extends BaseScraper {
                     ad.description = $('.section-description p').text().trim()
                     ad.source = AdSource.Otodom
 
+
+                    ad.title = $('.css-19829c-AdHeader-className').text();
+
                     const addressMatched = await AddressMatcher.match(ad.description).catch(e => null)
                     if (addressMatched) {
                         ad.street = addressMatched

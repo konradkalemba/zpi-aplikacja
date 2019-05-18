@@ -66,6 +66,8 @@ export class OlxScraper extends BaseScraper {
                     ad.description = $('#textContent').text().trim()
                     ad.source = AdSource.Olx
 
+                    ad.title = $('.offer-titlebox h1').text().trim()
+
                     const addressMatched = await AddressMatcher.match(ad.description).catch(e => null)
                     if (addressMatched) {
                         ad.street = addressMatched
