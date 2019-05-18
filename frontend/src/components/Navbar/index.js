@@ -1,22 +1,20 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
+import PropTypes from 'prop-types';
 import styles from './styles.module.scss'
-import {Navbar, Nav, Col} from "react-bootstrap"
+import homieLogo from '../../assets/images/homieLogo.png'
+import Button from "react-bootstrap/es/Button";
 
-
-class Index extends React.Component {
+class Navbar extends PureComponent {
     render() {
         return (
-            <Navbar bg="light" expand="lg" className={styles.nav}>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto">
-                        <Nav.Link href="#home">Home</Nav.Link>
-                        <Nav.Link href="#link">Link</Nav.Link>
-                    </Nav>
-                </Navbar.Collapse>
-            </Navbar>
+            <div className={styles.navbar}>
+                <img className={styles.homieLogo} src={homieLogo} alt={'homieLogo'}/>
+                <Button className={styles.addAd}><span className={styles.text}>+ Dodaj ogłoszenie</span></Button>
+            </div>
         );
     }
 }
 
-export default Index;
+Navbar.propTypes = {};
+
+export default Navbar;

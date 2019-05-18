@@ -1,0 +1,48 @@
+
+@font-face {
+  font-family: HKGrotesk;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 700;
+  src: url("../../assets/fonts/HKGrotesk/HKGrotesk-Regular.ttf");
+}
+
+.preferencesWrapper {
+  width: 60%;
+  margin: 20px auto 30px;
+  border: 1px ;
+  background-color: #eeeeee;
+  border-radius: 15px;
+  padding: 10px;
+  box-shadow: 0 0 9px 0 rgba(0,0,0,0.05);
+
+}
+
+.searchButton {
+  width: 95%;
+  margin: 0 auto;
+  text-align: center;
+  align-items: flex-start;
+  display: block;
+  color: #FFFFFF;
+  background-color: #FFAD00;
+  border: hidden;
+  border-radius: 20px;
+  font-size: 10px;
+  padding: 9px;
+  font-weight: 500;
+  vertical-align: middle;
+  letter-spacing: 1.5px;
+  box-shadow: 0 0 7px 2px rgba(0,0,0,0.1);
+
+}
+
+.searchButton:hover {
+  @extend .searchButton;
+  background-color: #ed9c00;
+}
+
+.row {
+  display: flex;
+
+}

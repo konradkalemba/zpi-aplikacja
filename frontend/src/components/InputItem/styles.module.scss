@@ -1,12 +1,25 @@
 .textInput {
   flex: 1;
   height: 28px;
-  border: 1px solid silver;
   border-radius: 4px;
-  width: 10%;
+  width: 100%;
   box-sizing: border-box;
-  margin-bottom: 15px;
+  margin: 0 5px 0 5px;
+
+  border: 1px darkgrey;
+  background-color: #eeeeee;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.15);
 }
+
+.textInput::placeholder{
+  color: rgba(162, 162, 162, 0.91) !important;
+  padding-left: 5px;
+}
+
+
 
 .adImage{
   width: 100%;
