@@ -16,10 +16,8 @@ const Ad = props => {
           </Col>
           <Col className={styles.infoCol} sm={6}>
             <h6>MIESZKANIE</h6>
-            <h6 className={styles.adTitle}>Nazwa ogłoszenia</h6>
-            <p>
-              {props.ad.street ? props.ad.street.name : null}
-            </p>
+            <h6><strong>Tytuł ogłoszenia: </strong>{props.ad.title}</h6>
+            {props.ad.street ?  <p>ul. {props.ad.street.name}</p> : null}
             <hr/>
             <ul className={styles.dashed}>
               {props.ad.area ? <li> Powierzchnia: <strong>{props.ad.area} m2</strong></li> : null}

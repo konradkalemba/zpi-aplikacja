@@ -1,6 +1,7 @@
 .ad {
+  width: 90%;
   padding: 1px 1px 1px 1px;
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto;
   background-color: white;
   text-align: left;
   border-radius: 5px 5px 5px 5px; }

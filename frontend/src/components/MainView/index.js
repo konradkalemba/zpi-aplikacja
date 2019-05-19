@@ -17,12 +17,12 @@ class MainView extends Component{
         return (
             <div className={'container-fluid'}>
                 <Row>
-                    <Col sm={4} fluid style={{ paddingLeft: 2, paddingRight: 1 }}>
+                    <Col sm={4} fluid style={{ paddingLeft: 0, paddingRight: 0 }}>
                         <React.Fragment>
                             <AdView/>
                         </React.Fragment>
                     </Col>
-                    <Col sm={8} fluid style={{ paddingLeft: 1, paddingRight: 4 }}>
+                    <Col sm={8} fluid style={{ paddingLeft: 0, paddingRight: 0 }}>
                         <React.Fragment>
                             <MapScreen/>
                         </React.Fragment>
