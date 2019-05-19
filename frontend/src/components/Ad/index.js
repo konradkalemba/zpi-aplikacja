@@ -31,7 +31,7 @@ class Ad extends React.Component {
           <Row>
             <Col className={styles.imageCol} sm={6}>
               <a href={this.props.ad.url}>
-                <Image className={styles.adImage}
+                <Image className={styles.adMainImage}
                        src={this.props.ad.photos.length > 0 ? this.props.ad.photos[this.props.ad.photos.length - 1].path : room}
                        fluid/>
               </a>
@@ -75,6 +75,14 @@ class Ad extends React.Component {
                       <span>Czynsz najmu: <strong>{this.props.ad.price}</strong>zł</span>
                     </h2>
                     {/*{this.props.ad.description}*/}
+                  </div>
+                  <div className={styles.imagesWrapper}>
+                    {this.props.ad.photos.length > 0 ? this.props.ad.photos.map(photo => (
+                      <div className={styles.imageItem}>
+                        <Image className={styles.image} src={photo.path}/>
+                      </div>
+                    )) : null
+                    }
                   </div>
                   <div className={styles.description}>
                     <h2>Opis ogłoszenia:</h2>

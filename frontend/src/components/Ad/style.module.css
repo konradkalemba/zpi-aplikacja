@@ -38,8 +38,20 @@
 .imageCol {
   padding: 0 0 0 0; }
 
-.adImage {
+.imagesWrapper {
+  display: flex;
+  width: 100%; }
+
+.adMainImage {
   border-radius: 3px 0 0 5px;
+  height: auto; }
+
+.image {
+  width: 100%;
+  height: auto; }
+
+.imageItem {
+  width: 20%;
   height: auto; }
 
 .infoCol {
