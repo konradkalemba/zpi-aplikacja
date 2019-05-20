@@ -70,3 +70,7 @@ create table zdjecia (
 alter table ogloszenia
     add column tytul varchar(255) not null,
     add column zrodlo varchar(50);
+
+alter table ulice
+    add column lat float,
+    add column long float;

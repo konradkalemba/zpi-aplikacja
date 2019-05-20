@@ -11,6 +11,12 @@ export default class Street extends BaseEntity {
 
     @Column({ name: 'nazwa' })
     name: string;
+
+    @Column()
+    lat: number;
+
+    @Column()
+    long: number;
     
     @OneToMany(() => Ad, (ad: Ad) => ad.street)
     ads: Ad[];
