@@ -58,7 +58,7 @@ class Ad extends React.Component {
                 <Modal.Body style={{margin: 20}}>
                   <div className={styles.modalHeader}>
                     {this.props.ad.street ? <h1>ul. {this.props.ad.street.name}</h1> : <h1>Wrocław</h1>}
-                    <Button className={styles.showSourceButton} href={this.props.ad.url}>
+                    <Button className={styles.showSourceButton} href={this.props.ad.url} target="blank">
                       Zobacz ogłoszenie na
                       {this.props.ad.source === 'gratka' ? <span> Gratka.pl</span> : null}
                       {this.props.ad.source === 'olx' ? <span> Olx.pl</span> : null}
