@@ -2,10 +2,14 @@ import React, { Component } from 'react'
 import L from 'leaflet';
 import styles from './style.module.scss';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
-import axios from 'axios';
-import Ad from '../Ad'
+import Ad from '../Ad';
+import { connect } from 'react-redux';
 
-export default class SimpleExample extends Component {
+const mapStateToProps = state => ({
+    ads: state.ads
+});
+
+class MapView extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -14,26 +18,6 @@ export default class SimpleExample extends Component {
             lng: 17.034,
             zoom: 14,
         }
-    }
-
-
-    componentDidMount() {
-        axios.get('http://localhost:3000')
-            .then(
-                (result) => {
-                    console.log(result.data);
-                    this.setState({
-                        isLoaded: true,
-                        ads: result.data
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            )
     }
 
     render() {
@@ -55,7 +39,7 @@ export default class SimpleExample extends Component {
                         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    {this.state.ads.filter(ad => ad.street).map(ad => {
+                    {this.props.ads.filter(ad => ad.street).map(ad => {
                         return (
                             <Marker position={[ad.street.lat, ad.street.long]}>
                                 <Popup className={styles.adPopup}><Ad ad={ad} /></Popup>
@@ -67,3 +51,7 @@ export default class SimpleExample extends Component {
         )
     }
 }
+
+export default connect(
+    mapStateToProps
+)(MapView);

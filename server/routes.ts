@@ -5,7 +5,7 @@ const streetController = new StreetController()
 
 export default [
     {
-        path: '/',
+        path: '/ads',
         method: 'get',
         handle: adController.index
     },
