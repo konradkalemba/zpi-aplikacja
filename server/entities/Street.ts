@@ -6,6 +6,9 @@ export default class Street extends BaseEntity {
     @PrimaryColumn({ name: 'id' })
     id: number;
 
+    @PrimaryColumn({ name: 'id_teryt' })
+    idTeryt: number;
+
     @PrimaryColumn({ name: 'miasto_id_teryt' })
     cityId: number;
 
