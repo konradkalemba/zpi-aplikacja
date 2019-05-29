@@ -7,6 +7,11 @@ export enum AdSource {
     Otodom = 'otodom'
 }
 
+export enum Size {
+    Room = 'room',
+    Flat = 'flat'
+}
+
 @Entity('ogloszenia')
 export default class Ad extends BaseEntity {
     @PrimaryGeneratedColumn()

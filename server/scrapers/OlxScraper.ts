@@ -68,6 +68,7 @@ export class OlxScraper extends BaseScraper {
                     ad.sourceId = $('#offerdescription').find('small').text().trim().split(/\s+/)[2].trim()
                     console.log('olx - id: ' + ad.sourceId)
 
+                    ad.price = parseFloat($('.price-label').text().trim().replace(/\D/g,''))
                     ad.title = $('.offer-titlebox h1').text().trim()
                     const addressMatched = await AddressMatcher.match(ad.description).catch(e => null)
                     if (addressMatched) {

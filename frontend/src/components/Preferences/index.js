@@ -4,24 +4,55 @@ import {Formik, Form, Field, ErrorMessage} from 'formik';
 import Select from "../Select";
 import InputItem from "../InputItem";
 import PreferenceItem from '../PreferenceItem'
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { setAds } from '../../actions';
+
+const mapDispatchToProps = dispatch => ({
+  setAds: ads => dispatch(setAds(ads))
+});
 
 class Preferences extends Component {
-
   render() {
     return (
       <div className={styles.preferencesWrapper}>
         <Formik
           initialValues={{
-            adType: 'flat',
+            size: '',
             roomsNumber: '',
             floor: '',
             priceMin: '',
             priceMax: '',
-            propertySizeMin: '',
-            propertySizeMax: ''
+            areaMin: '',
+            areaMax: ''
           }}
-          onSubmit={(values, {setSubmitting}) => {
-            console.log(values);
+          onSubmit={(values, {setSubmitting}) => {            
+            if (Array.isArray(values.roomsNumber)) {
+              values.roomsNumber = values.roomsNumber.join(',');
+            }
+
+            if (Array.isArray(values.floor)) {
+              values.floor = values.floor.join(',');
+            }
+
+            axios.get('http://localhost:3000/ads', {
+                params: values
+              })
+              .then(
+                (result) => {
+                  this.props.setAds(result.data);
+                  this.setState({
+                    isLoaded: true
+                  });
+                },
+                (error) => {
+                  this.setState({
+                    isLoaded: true,
+                    error
+                  });
+                }
+              )
+
             setSubmitting(false);
           }}
         >{props => {
@@ -42,18 +73,18 @@ class Preferences extends Component {
                 <PreferenceItem
                   children={
                     <Field
-                      name="adType"
+                      name="size"
                       component={Select}
                       title={'Rodzaj ogłoszenia'}
-                      placeholderMsg={'Rodzaj ogłoszenia'}
-                      items={[
+                      placeholder={'Rodzaj ogłoszenia'}
+                      options={[
                         {
-                          id: 'flat',
-                          name: 'Mieszkanie'
+                          value: 'flat',
+                          label: 'Mieszkanie'
                         },
                         {
-                          id: 'room',
-                          name: 'Pokój'
+                          value: 'room',
+                          label: 'Pokój'
                         }
                       ]}
                     />
@@ -64,25 +95,29 @@ class Preferences extends Component {
                     <Field name="roomsNumber"
                            component={Select}
                            title={'Liczba pokoi'}
-                           placeholderMsg={'Liczba pokoi'}
-                           items={[
-                             {name: '1'},
-                             {name: '2'},
-                             {name: '3'},
-                             {name: '4'}
+                           placeholder={'Liczba pokoi'}
+                           options={[
+                             {value: '1', label: '1'},
+                             {value: '2', label: '2'},
+                             {value: '3', label: '3'},
+                             {value: '4', label: '4'}
                            ]}
+                           isMulti={true}
                     />
                   }
                 />
                 <PreferenceItem
                   children={
-                    <Field name="floor" component={Select} title={'Pietro'} placeholderMsg={'Wybierz piętro'}
-                           items={[
-                             {name: '1'},
-                             {name: '2'},
-                             {name: '3'},
-                             {name: '4'}
+                    <Field name="floor" component={Select} title={'Pietro'} placeholder={'Wybierz piętro'}
+                           options={[
+                             {value: '1', label: '1'},
+                             {value: '2', label: '2'},
+                             {value: '3', label: '3'},
+                             {value: '4', label: '4'},
+                             {value: '5', label: '5'},
+                             {value: '6', label: '6'}
                            ]}
+                           isMulti={true}
                     />
                   }
                 />
@@ -114,15 +149,15 @@ class Preferences extends Component {
                     <React.Fragment>
                       <Field
                         component={InputItem}
-                        name="propertySizeMin"
-                        id="propertySizeMin"
+                        name="areaMin"
+                        id="areaMin"
                         placeholder="Powierzchnia min."
                         type={'number'}
                       />
                       <Field
                         component={InputItem}
-                        name="propertySizeMax"
-                        id="propertySizeMax"
+                        name="areaMax"
+                        id="areaMax"
                         placeholder="Powierzchnia max."
                         type={'number'}
                       />
@@ -148,5 +183,7 @@ class Preferences extends Component {
   }
 }
 
-export default Preferences;
-
+export default connect(
+  null,
+  mapDispatchToProps
+)(Preferences);

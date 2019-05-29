@@ -1,15 +1,57 @@
 .ad {
+  width: 90%;
   padding: 1px 1px 1px 1px;
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto;
   background-color: white;
   text-align: left;
   border-radius: 5px 5px 5px 5px; }
 
+.button, .detailsButton, .showSourceButton, .button:hover {
+  color: #FFFFFF;
+  background-color: #FFAD00;
+  border: hidden;
+  border-radius: 20px;
+  font-size: 10px;
+  padding: 9px;
+  font-weight: 500;
+  vertical-align: middle;
+  letter-spacing: 1.5px;
+  box-shadow: 0 0 7px 2px rgba(0, 0, 0, 0.1); }
+
+.detailsButton {
+  margin: 5% auto; }
+
+.showSourceButton {
+  margin-left: auto; }
+
+.modalHeader {
+  display: flex; }
+
+.description {
+  width: 60%;
+  font-size: 12px;
+  white-space: pre-line; }
+
+.button:hover, .detailsButton:hover, .showSourceButton:hover {
+  background-color: #ed9c00; }
+
 .imageCol {
   padding: 0 0 0 0; }
 
-.adImage {
+.imagesWrapper {
+  display: flex;
+  width: 100%; }
+
+.adMainImage {
   border-radius: 3px 0 0 5px;
+  height: auto; }
+
+.image {
+  width: 100%;
+  height: auto; }
+
+.imageItem {
+  width: 20%;
   height: auto; }
 
 .infoCol {
