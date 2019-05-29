@@ -1,5 +1,5 @@
-import {BaseScraper} from './BaseScraper'
-import {URL} from 'url'
+import { BaseScraper } from './BaseScraper'
+import { URL } from 'url'
 import request from 'request'
 import cheerio from 'cheerio'
 import { AddressMatcher } from '../determine-address'
@@ -16,7 +16,7 @@ export class GratkaScraper extends BaseScraper {
             request(this._pageURL.href, (error, response, html) => {
                 if (!error && response.statusCode === 200) {
 
-                    const $: CheerioStatic = cheerio.load(html, {decodeEntities: false})
+                    const $: CheerioStatic = cheerio.load(html, { decodeEntities: false })
 
                     $('#leftColumn article').each(function (index, element) {
                         const ad: Cheerio = $(element)
@@ -67,7 +67,6 @@ export class GratkaScraper extends BaseScraper {
                         decodeEntities: true
                     })
                     let ad = new Ad()
-
                     ad.source = AdSource.Gratka
                     ad.photos = []
                     ad.url = url.href
@@ -130,6 +129,8 @@ export class GratkaScraper extends BaseScraper {
                             ad.buildingMaterial = parameterValue
                         }
                     })
+
+                    ad.sourceId = ad.url.substr(ad.url.lastIndexOf('/') + 1)
 
                     resolve(ad)
                 } else {
