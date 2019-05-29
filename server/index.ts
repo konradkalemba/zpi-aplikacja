@@ -10,9 +10,9 @@ import { OtodomScraper } from "./scrapers/OtodomScraper"
 
 databaseConnect().then(() => {
     const otodomScraper: OtodomScraper = new OtodomScraper()
-    otodomScraper.process()
+    //otodomScraper.process()
     const olxScraper: OlxScraper = new OlxScraper()
     olxScraper.process()
     const gratkaScraper: GratkaScraper = new GratkaScraper()
-    gratkaScraper.process()
+    //gratkaScraper.process()
 }).catch(error => console.error(error))

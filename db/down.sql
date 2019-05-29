@@ -1,6 +1,7 @@
-drop table ulice;
-drop table dzielnice;
-drop table miasta;
-drop table wojewodztwa;
-drop table ogloszenia;
-drop table zdjecia;
+
+drop table ogloszenia cascade;
+drop table wojewodztwa cascade;
+drop table dzielnice cascade;
+drop table ulice cascade;
+drop table miasta cascade;
+drop table zdjecia cascade;
