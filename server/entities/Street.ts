@@ -6,10 +6,10 @@ export default class Street extends BaseEntity {
     @PrimaryColumn({ name: 'id' })
     id: number;
 
-    @PrimaryColumn({ name: 'id_teryt' })
+    @Column({ name: 'id_teryt' })
     idTeryt: number;
 
-    @PrimaryColumn({ name: 'miasto_id_teryt' })
+    @Column({ name: 'miasto_id_teryt' })
     cityId: number;
 
     @Column({ name: 'nazwa' })

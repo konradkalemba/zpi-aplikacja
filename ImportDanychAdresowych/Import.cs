@@ -185,8 +185,10 @@ namespace ImportDanychAdresowych
                     // województwa
                     foreach (var w in _w)
                         if (!existing.Contains(w.IdTeryt))
+                        {
+                            //w.FindCoordinates().Wait();
                             await c.ExecuteAsync("insert into wojewodztwa(id_teryt,nazwa) values (@IdTeryt,@Nazwa)", w);
-
+                        }
                     // miasta
                     Console.WriteLine("Kopiowanie miast...");
                     existing = (await c.QueryAsync<int>("select id_teryt from miasta;")).ToHashSet();
@@ -195,6 +197,7 @@ namespace ImportDanychAdresowych
                     {
                         foreach (var m in _m)
                         {
+                            //m.FindCoordinates().Wait();
                             wr.WriteRow(m.IdTeryt, m.Nazwa, m.WojewodztwoIdTeryt);
                         }
                         wr.Complete();
@@ -208,6 +211,7 @@ namespace ImportDanychAdresowych
                     {
                         foreach (var d in _d)
                         {
+                            //d.FindCoordinates().Wait();
                             wr.WriteRow(d.IdTeryt, d.Nazwa, d.MiastoIdTeryt);
                         }
                         wr.Complete();
@@ -226,6 +230,7 @@ namespace ImportDanychAdresowych
                     {
                         foreach (var u in _u)
                         {
+                            //u.FindCoordinates().Wait();
                             wr.WriteRow(u.IdTeryt, u.Nazwa, u.MiastoIdTeryt);
                         }
                         wr.Complete();

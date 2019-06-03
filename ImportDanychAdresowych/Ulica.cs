@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace ImportDanychAdresowych
 {
@@ -8,6 +9,19 @@ namespace ImportDanychAdresowych
         public string Cecha { get; set; }
         public int MiastoIdTeryt { get; set; }
         public string Nazwa { get; set; }
+
+        public double Lat { get; set; }
+        public double Lng { get; set; }
+
+        public async Task FindCoordinates()
+        {
+            var c = await NominatimClient.Query(Nazwa);
+            if (c != null)
+            {
+                Lat = c.Value.Item1;
+                Lng = c.Value.Item2;
+            }
+        }
 
         public override bool Equals(object other)
         {

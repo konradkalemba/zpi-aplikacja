@@ -1,5 +1,6 @@
 import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
 import { Street, Photo } from './index'
+import District from './District';
 
 export enum AdSource {
     Olx = 'olx',
@@ -19,6 +20,9 @@ export default class Ad extends BaseEntity {
 
     @Column({ name: 'miasto_id_teryt' })
     cityId: number;
+    
+    @Column({ name: 'dzielnica_id_teryt' })
+    districtId: number;
 
     @Column({ name: 'zrodlo_id' })
     sourceId: string;
@@ -80,9 +84,14 @@ export default class Ad extends BaseEntity {
     @ManyToOne(type => Street, (street: Street) => street.ads)
     @JoinColumn([
         { name: 'ulica_id', referencedColumnName: 'id' },
-        { name: 'miasto_id_teryt', referencedColumnName: 'cityId' }
     ])
     street: Street;
+    
+    @ManyToOne(type => District, (district: District) => district.ads)
+    @JoinColumn([
+        { name: 'dzielnica_id_teryt', referencedColumnName: 'districtId' }
+    ])
+    district: District
 
     @OneToMany(() => Photo, (photo: Photo) => photo.ad)
     photos: Photo[];
