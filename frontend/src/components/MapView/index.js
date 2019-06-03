@@ -12,14 +12,22 @@ const mapStateToProps = state => ({
 });
 
 class MarkerIcon extends Component {
-  render() {
-    const price = this.props.price || 'Nieznane';
-    return (
-        <div>
-            {price}
-        </div>
-    );
-  }
+    render() {
+        let { price } = this.props;
+        price = parseFloat(price);
+
+        if (Number.isNaN(price) || price === 0) {
+            price = 'Nieznane';
+        } else {
+            price += ' zł';
+        }
+
+        return (
+            <div>
+                {price}
+            </div>
+        );
+    }
 }
 
 class MapView extends Component {
@@ -37,8 +45,28 @@ class MapView extends Component {
         const position = [this.state.lat, this.state.lng];
 
         const createClusterCustomIcon = function (cluster) {
+            let priceMin
+            let priceMax
+            for (const { options } of cluster.getAllChildMarkers()) {
+                const price = parseFloat(options.price)
+
+                if (!Number.isNaN(price) && price !== 0) {
+                    if (!priceMin || price < priceMin) {
+                        priceMin = price;
+                    }
+                    if (!priceMax || price > priceMax) {
+                        priceMax = price;
+                    }
+                }
+            }
+
             return L.divIcon({
-                html: `<div>${cluster.getChildCount()}</div>`,
+                html:  ReactDOMServer.renderToString(
+                    <div>
+                        {cluster.getChildCount()}<br/>
+                        {(priceMin && priceMax) &&<small>{priceMin} zł &ndash; {priceMax} zł</small>}
+                    </div>
+                ),
                 className: styles.clusterMarkerIcon,
                 iconSize: L.point(40, 40, true),
             });
@@ -65,6 +93,7 @@ class MapView extends Component {
                         {this.props.ads.filter(ad => ad.street).map(ad => {
                             return (
                                 <Marker
+                                    price={ad.price}
                                     position={[ad.street.lat, ad.street.long]}
                                     icon={L.divIcon({
                                         className: styles.markerIcon,
