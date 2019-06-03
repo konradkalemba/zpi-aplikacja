@@ -16,7 +16,13 @@ export enum Size {
 export default class Ad extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
-    
+
+    @Column({ name: 'miasto_id_teryt' })
+    cityId: number;
+
+    @Column({ name: 'zrodlo_id' })
+    sourceId: string;
+
     @Column({ name: 'tytul' })
     title: string;
 
@@ -25,7 +31,7 @@ export default class Ad extends BaseEntity {
 
     @Column({ name: 'powierzchnia' })
     area: number;
-    
+
     @Column({ name: 'dodatkowe_oplaty' })
     additionalFees: number;
 
@@ -58,14 +64,14 @@ export default class Ad extends BaseEntity {
 
     @Column({ name: 'nr_telefonu' })
     phoneNumber: string;
-    
+
     @Column({ name: 'umeblowanie' })
     finishing: string;
-    
+
     @Column({ name: 'czynsz' })
     price: number;
-    
-    @Column()
+
+    @Column({ name: 'url' })
     url: string;
 
     @Column({ name: 'zrodlo' })
@@ -74,7 +80,7 @@ export default class Ad extends BaseEntity {
     @ManyToOne(type => Street, (street: Street) => street.ads)
     @JoinColumn([
         { name: 'ulica_id', referencedColumnName: 'id' },
-        { name: 'miasto_id', referencedColumnName: 'cityId' }
+        { name: 'miasto_id_teryt', referencedColumnName: 'cityId' }
     ])
     street: Street;
 

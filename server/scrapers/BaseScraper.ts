@@ -15,14 +15,17 @@ export abstract class BaseScraper implements Scraper {
     protected async crawlURLs(urls: URL[]): Promise<void> {
         for (let url of urls) {
             const ad = await this.getAdFromURL(url)
+            // id wrocławia - teryt
+            ad.cityId = 986283;
             this._ads.push(ad)
             console.log(ad)
-
-            await ad.save()
-            for (const photo of ad.photos) {
-                photo.ad = ad
-                await photo.save()
-            }
+            if (await Ad.findOne({ source: ad.source, sourceId: ad.sourceId }) == null) {
+                await ad.save()
+                for (const photo of ad.photos) {
+                    photo.ad = ad
+                    await photo.save()
+                }
+            } else console.log('pomijam istniejące:  ' + JSON.stringify(ad))
         }
     }
 

@@ -61,6 +61,9 @@ export class OtodomScraper extends BaseScraper {
                     ad.url = url.href
                     ad.description = $('.section-description p').text().trim()
                     ad.source = AdSource.Otodom
+                    let srcid = $('.css-1ssw13m-AdSignature-className').text().split(/\s+/)[4]
+                    ad.sourceId = srcid.substr(0, srcid.lastIndexOf('N'))
+                    console.log(ad.sourceId)
 
 
                     ad.title = $('.css-19829c-AdHeader-className').text();
