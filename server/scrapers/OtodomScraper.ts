@@ -73,7 +73,7 @@ export class OtodomScraper extends BaseScraper {
                         ad.street = addressMatched
                     }
 
-                    $('.slick-list picture img').each((index, element) => {
+                    $('.slick-list .css-1oanblo-Image-className').each((index, element) => {
                         const imgTag: Cheerio = $(element)
                         const photo = new Photo()
                         photo.path = imgTag.attr('src')

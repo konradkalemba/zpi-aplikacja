@@ -1,6 +1,18 @@
 .preferenceItem {
   flex: 1;
-  margin: 1em 1em;
+  margin: 10px 10px 10px 10px;
   display: flex; }
+
+.preferenceItem button {
+  z-index: 0 !important; }
+
+.preferenceItem select input {
+  border: 1px darkgrey;
+  margin: 0 5px 0 5px;
+  color: gray;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.15); }
 
 /*# sourceMappingURL=styles.module.css.map */
