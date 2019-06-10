@@ -87,11 +87,11 @@ export default class Ad extends BaseEntity {
     ])
     street: Street;
     
-    @ManyToOne(type => District, (district: District) => district.ads)
-    @JoinColumn([
-        { name: 'dzielnica_id_teryt', referencedColumnName: 'districtId' }
-    ])
-    district: District
+    // @ManyToOne(type => District, (district: District) => district.ads)
+    // @JoinColumn([
+    //     { name: 'dzielnica_id_teryt', referencedColumnName: 'districtId' }
+    // ])
+    // district: District
 
     @OneToMany(() => Photo, (photo: Photo) => photo.ad)
     photos: Photo[];

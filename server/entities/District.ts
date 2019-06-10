@@ -12,6 +12,6 @@ export default class District extends BaseEntity {
     @Column({ name: 'nazwa' })
     name: string;
     
-    @OneToMany(() => Ad, (ad: Ad) => ad.district)
-    ads: Ad[];
+    // @OneToMany(() => Ad, (ad: Ad) => ad.district)
+    // ads: Ad[];
 }
