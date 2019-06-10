@@ -3,7 +3,11 @@
   flex: 1;
   margin: 10px 10px 10px 10px;
   display: flex;
+}
 
+.preferenceItem button{
+
+  z-index: 0 !important;
 }
 
 .preferenceItem select input{
