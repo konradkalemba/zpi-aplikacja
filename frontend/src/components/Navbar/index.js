@@ -9,7 +9,7 @@ class Navbar extends PureComponent {
         return (
             <div className={styles.navbar}>
                 <img className={styles.homieLogo} src={homieLogo} alt={'homieLogo'}/>
-                <Button className={styles.addAd}><span className={styles.text}>+ Dodaj ogłoszenie</span></Button>
+                {/*<Button className={styles.addAd}><span className={styles.text}>+ Dodaj ogłoszenie</span></Button>*/}
             </div>
         );
     }
