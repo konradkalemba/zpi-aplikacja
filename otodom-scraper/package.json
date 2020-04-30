@@ -13,7 +13,7 @@
     "fs": "0.0.1-security",
     "html-table-to-json": "^0.4.0",
     "http-errors": "~1.6.2",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "morgan": "~1.9.0",
     "path": "^0.12.7",
     "pug": "^2.0.3",
